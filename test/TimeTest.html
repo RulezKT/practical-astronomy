@@ -45,18 +45,18 @@
                 assert.equal(time.daysInMonth(1900, 2), 28);
             });
 
-            /*
-             * 2 - The Date of Easter
-             */
-
             test("Days in month before first year of Gregorian calendar", function(assert) {
                 assert.throws(
                     function() {
-                        time.daysInMonth(1582, 1);
+                        time.daysInMonth(1582, 12);
                     },
-                    new TimeError("year must be on Gregorian Calendar, i.e. >= 1583")
+                    new TimeError("year must be in Gregorian Calendar, i.e. >= 1583")
                 );
             });
+
+            /*
+             * 2 - The date of Easter
+             */
 
             test("Date of Easter", function(assert) {
                 assert.equal(time.dateOfEaster(1974).toUTCString(), new Date(1974, 3, 14).toUTCString());
@@ -79,7 +79,42 @@
                     function() {
                         time.dateOfEaster(1582);
                     },
-                    new TimeError("year must be on Gregorian Calendar, i.e. >= 1583")
+                    new TimeError("year must be in Gregorian Calendar, i.e. >= 1583")
+                );
+            });
+
+            /*
+             * 3 - Converting the date to the day number
+             */
+
+            test("Date to day number", function(assert) {
+                assert.equal(time.dateToDayNumber(1985, 2, 17), 48); // month <= 2
+                assert.equal(time.dateToDayNumber(1985, 11, 13), 317); // month > 2
+                assert.equal(time.dateToDayNumber(1984, 11, 13), 318); // Leap year
+            });
+
+            test("Date to day number before first year of Gregorian calendar", function(assert) {
+                assert.throws(
+                    function() {
+                        time.daysInMonth(1582, 12);
+                    },
+                    new TimeError("year must be in Gregorian Calendar, i.e. >= 1583")
+                );
+            });
+
+            test("Date to days elapsed since epoch", function(assert) {
+                assert.equal(time.dateToDaysElapsedSinceEpoch(1985, 2, 17), -1778); // before epoch
+                assert.equal(time.dateToDaysElapsedSinceEpoch(1989, 12, 31), 0); // epoch
+                assert.equal(time.dateToDaysElapsedSinceEpoch(1990, 1, 1), 1); // day after epoch
+                assert.equal(time.dateToDaysElapsedSinceEpoch(2016, 9, 20), 9760); // after epoch
+            });
+
+            test("Date to days elapsed since epoch before first year of Gregorian calendar", function(assert) {
+                assert.throws(
+                    function() {
+                        time.dateToDaysElapsedSinceEpoch(1582, 12);
+                    },
+                    new TimeError("year must be in Gregorian Calendar, i.e. >= 1583")
                 );
             });
 

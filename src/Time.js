@@ -18,12 +18,12 @@ Time.prototype.daysInMonth = function(year, month) {
 
     switch(month) {
         case 2: {
-            days = (year % 4 == 0 && !((year % 100 == 0) && (year % 400 != 0))) ? 29 : 28;
+            days = isLeapYear(year) ? 29 : 28;
             break;
         }
-        case 4: { days = 30; break; }
-        case 6: { days = 30; break; }
-        case 9: { days = 30; break; }
+        case 4:  { days = 30; break; }
+        case 6:  { days = 30; break; }
+        case 9:  { days = 30; break; }
         case 11: { days = 30; break; }
     }
 
@@ -31,7 +31,7 @@ Time.prototype.daysInMonth = function(year, month) {
 }
 
 /*
- * 2 - The Date of Easter
+ * 2 - The date of Easter
  */
 Time.prototype.dateOfEaster = function(year) {
 
@@ -56,8 +56,62 @@ Time.prototype.dateOfEaster = function(year) {
     return new Date(year, month-1, day);
 };
 
+/*
+ * 3 - Converting the date to the day number
+ */
+Time.prototype.dateToDayNumber = function(year, month, day) {
+
+    checkYearInGregorianCalendar(year);
+
+    if (month > 2) {
+        a = month + 1;
+        b = Math.floor(a * 30.6);
+        c = b - (isLeapYear(year) ? 62 : 63);
+        dayNumber = c + day;
+    } else {
+        a = month - 1;
+        b = a * 63;
+        c = Math.floor(b / 2);
+        dayNumber = c + day;
+    }
+
+    return dayNumber;
+}
+
+Time.prototype.dateToDaysElapsedSinceEpoch = function(year, month, day) {
+
+    checkYearInGregorianCalendar(year);
+
+    var daysElapsed = 0;
+
+    if (year < 1990) {
+
+        for (i = 1989; i >= year; i--) {
+            daysElapsed -= daysInYear(i);
+        }
+
+    } else {
+
+        for (i = 1990; i < year; i++) {
+            daysElapsed += daysInYear(i);
+        }
+    }
+
+    daysElapsed += this.dateToDayNumber(year, month, day);
+
+    return daysElapsed;
+}
+
 function checkYearInGregorianCalendar(year) {
     if (year < 1583) {
-        throw new TimeError("year must be on Gregorian Calendar, i.e. >= 1583");
+        throw new TimeError("year must be in Gregorian Calendar, i.e. >= 1583");
     }
+}
+
+function isLeapYear(year) {
+    return (year % 4 == 0 && !((year % 100 == 0) && (year % 400 != 0)));
+}
+
+function daysInYear(year) {
+    return isLeapYear(year) ? 366 : 365;
 }
