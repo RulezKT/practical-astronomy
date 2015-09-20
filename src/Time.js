@@ -10,6 +10,7 @@ TimeError.prototype = Error.prototype;
 /*
  * 1 - Calendars
  */
+
 Time.prototype.daysInMonth = function(year, month) {
 
     checkMonthInGregorianCalendar(year, month);
@@ -33,6 +34,7 @@ Time.prototype.daysInMonth = function(year, month) {
 /*
  * 2 - The date of Easter
  */
+
 Time.prototype.dateOfEaster = function(year) {
 
     checkYearInGregorianCalendar(year);
@@ -59,6 +61,7 @@ Time.prototype.dateOfEaster = function(year) {
 /*
  * 3 - Converting the date to the day number
  */
+
 Time.prototype.dateToDayNumber = function(year, month, day) {
 
     checkDateInGregorianCalendar(year, month, day);
@@ -102,6 +105,45 @@ Time.prototype.dateToDaysElapsedSinceEpoch = function(year, month, day) {
     return daysElapsed;
 }
 
+/*
+ * 4 - Julian day numbers
+ */
+
+Time.prototype.dateToJulianDayNumber = function(year, month, day) {
+
+    var y = year;
+    var m = month;
+
+    if (month <= 2) {
+        y -= 1;
+        m += 12;
+    }
+
+    var b = 0;
+
+    if (dateInGregorianCalendar(year, month, day)) {
+        var a = Math.floor(y / 100);
+        var b = (2 - a + Math.floor(a / 4));
+    }
+
+    var c = 0;
+
+    if (y < 0) {
+        c = Math.floor((365.25 * y) - 0.75);
+    } else {
+        c = Math.floor(365.25 * y);
+    }
+
+    var d = Math.floor(30.6001 * (m + 1));
+
+    return b + c + d + day + 1720994.5;
+}
+
+Time.prototype.dateToModifiedJulianDayNumber = function(year, month, day) {
+
+    return this.dateToJulianDayNumber(year, month, day) - 2400000.5;
+}
+
 function checkYearInGregorianCalendar(year) {
     if (year < 1583) {
         throw new TimeError("year must be in Gregorian Calendar, i.e. >= 1583");
@@ -115,7 +157,7 @@ function checkMonthInGregorianCalendar(year, month) {
 }
 
 function checkDateInGregorianCalendar(year, month, day) {
-    if (year < 1582 || (year == 1582 && month < 10) || (year == 1582 && month == 10 && day < 15)) {
+    if (!dateInGregorianCalendar(year, month, day)) {
         throw new TimeError("date must be in Gregorian Calendar, i.e. >= 1582/10/15");
     }
 }
@@ -126,4 +168,8 @@ function isLeapYear(year) {
 
 function daysInYear(year) {
     return isLeapYear(year) ? 366 : 365;
+}
+
+function dateInGregorianCalendar(year, month, day) {
+    return (year > 1582 || (year == 1582 && month > 10) || (year == 1582 && month == 10 && day >= 15));
 }

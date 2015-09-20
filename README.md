@@ -15,7 +15,7 @@ Implementations of calculations from '[Practical Astronomy With Your Calculator]
 | 1           | Calendars                                              | daysInMonth(year, month)                                                         |
 | 2           | The date of Easter                                     | dateOfEaster(year)                                                               |
 | 3           | Converting the date to the day number                  | dateToDayNumber(year, month, day), dateToDaysElapsedSinceEpoch(year, month, day) |
-| 4           | Julian day numbers                                     |                                                                                  |
+| 4           | Julian day numbers                                     | dateToJulianDayNumber(year, month, day), dateToModifiedJulianDayNumber(year, month, day) |
 | 5           | Converting the Julian day number to the calendar date  |                                                                                  |
 | 6           | Finding the day of the week                            |                                                                                  |
 | 7           | Converting hours, minutes and seconds to decimal hours |                                                                                  |
