@@ -12,7 +12,7 @@ TimeError.prototype = Error.prototype;
  */
 Time.prototype.daysInMonth = function(year, month) {
 
-    checkYearInGregorianCalendar(year);
+    checkMonthInGregorianCalendar(year, month);
 
     var days = 31;
 
@@ -61,7 +61,7 @@ Time.prototype.dateOfEaster = function(year) {
  */
 Time.prototype.dateToDayNumber = function(year, month, day) {
 
-    checkYearInGregorianCalendar(year);
+    checkDateInGregorianCalendar(year, month, day);
 
     if (month > 2) {
         a = month + 1;
@@ -80,7 +80,7 @@ Time.prototype.dateToDayNumber = function(year, month, day) {
 
 Time.prototype.dateToDaysElapsedSinceEpoch = function(year, month, day) {
 
-    checkYearInGregorianCalendar(year);
+    checkDateInGregorianCalendar(year, month, day);
 
     var daysElapsed = 0;
 
@@ -105,6 +105,18 @@ Time.prototype.dateToDaysElapsedSinceEpoch = function(year, month, day) {
 function checkYearInGregorianCalendar(year) {
     if (year < 1583) {
         throw new TimeError("year must be in Gregorian Calendar, i.e. >= 1583");
+    }
+}
+
+function checkMonthInGregorianCalendar(year, month) {
+    if (year < 1583 || (year == 1582 && month < 11)) {
+        throw new TimeError("month must be in Gregorian Calendar, i.e. >= 1582/11");
+    }
+}
+
+function checkDateInGregorianCalendar(year, month, day) {
+    if (year < 1582 || (year == 1582 && month < 10) || (year == 1582 && month == 10 && day < 15)) {
+        throw new TimeError("date must be in Gregorian Calendar, i.e. >= 1582/10/15");
     }
 }
 

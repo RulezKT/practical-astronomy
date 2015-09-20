@@ -48,9 +48,9 @@
             test("Days in month before first year of Gregorian calendar", function(assert) {
                 assert.throws(
                     function() {
-                        time.daysInMonth(1582, 12);
+                        time.daysInMonth(1582, 10);
                     },
-                    new TimeError("year must be in Gregorian Calendar, i.e. >= 1583")
+                    new TimeError("month must be in Gregorian Calendar, i.e. >= 1582/11")
                 );
             });
 
@@ -93,12 +93,12 @@
                 assert.equal(time.dateToDayNumber(1984, 11, 13), 318); // Leap year
             });
 
-            test("Date to day number before first year of Gregorian calendar", function(assert) {
+            test("Date to day number before Gregorian calendar", function(assert) {
                 assert.throws(
                     function() {
-                        time.daysInMonth(1582, 12);
+                        time.dateToDayNumber(1582, 10, 14);
                     },
-                    new TimeError("year must be in Gregorian Calendar, i.e. >= 1583")
+                    new TimeError("date must be in Gregorian Calendar, i.e. >= 1582/10/15")
                 );
             });
 
@@ -109,12 +109,12 @@
                 assert.equal(time.dateToDaysElapsedSinceEpoch(2016, 9, 20), 9760); // after epoch
             });
 
-            test("Date to days elapsed since epoch before first year of Gregorian calendar", function(assert) {
+            test("Date to days elapsed since epoch before Gregorian calendar", function(assert) {
                 assert.throws(
                     function() {
-                        time.dateToDaysElapsedSinceEpoch(1582, 12);
+                        time.dateToDaysElapsedSinceEpoch(1582, 10, 14);
                     },
-                    new TimeError("year must be in Gregorian Calendar, i.e. >= 1583")
+                    new TimeError("date must be in Gregorian Calendar, i.e. >= 1582/10/15")
                 );
             });
 
