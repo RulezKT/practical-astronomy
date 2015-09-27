@@ -14,9 +14,7 @@
 
             var time = new Time();
 
-            /*
-             * 1 - Calendars
-             */
+            module("1 - Calendars");
 
             test("Days in month when not a leap year", function(assert) {
                 assert.equal(time.daysInMonth(2015, 1), 31);
@@ -54,9 +52,7 @@
                 );
             });
 
-            /*
-             * 2 - The date of Easter
-             */
+            module("2 - The date of Easter");
 
             test("Date of Easter", function(assert) {
                 assert.equal(time.dateOfEaster(1974).toUTCString(), new Date(1974, 3, 14).toUTCString());
@@ -83,9 +79,7 @@
                 );
             });
 
-            /*
-             * 3 - Converting the date to the day number
-             */
+            module("3 - Converting the date to the day number");
 
             test("Date to day number", function(assert) {
                 assert.equal(time.dateToDayNumber(1985, 2, 17), 48); // month <= 2
@@ -118,9 +112,7 @@
                 );
             });
 
-            /*
-             * 4 - Julian day numbers
-             */
+            module("4 - Julian day numbers");
 
             test("Date to julian day number", function(assert) {
                 assert.equal(time.dateToJulianDayNumber(-4712, 1, 1.5), 0);
