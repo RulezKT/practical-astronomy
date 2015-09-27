@@ -66,6 +66,11 @@ Time.prototype.dateToDayNumber = function(year, month, day) {
 
     checkDateInGregorianCalendar(year, month, day);
 
+    var a;
+    var b;
+    var c
+    var dayNumber;
+
     if (month > 2) {
         a = month + 1;
         b = Math.floor(a * 30.6);
@@ -89,7 +94,7 @@ Time.prototype.dateToDaysElapsedSinceEpoch = function(year, month, day) {
 
     if (year < 1990) {
 
-        for (i = 1989; i >= year; i--) {
+        for (var i = 1989; i >= year; i--) {
             daysElapsed -= daysInYear(i);
         }
 
