@@ -55,19 +55,19 @@
             module("2 - The date of Easter");
 
             test("Date of Easter", function(assert) {
-                assert.equal(time.dateOfEaster(1974).toUTCString(), new Date(1974, 3, 14).toUTCString());
+                assert.equal(time.dateOfEaster(1974).toString(), new CalendarDate(1974, 4, 14).toString());
             });
 
             test("Earliest date of Easter", function(assert) {
-                assert.equal(time.dateOfEaster(1818).toUTCString(), new Date(1818, 2, 22).toUTCString());
+                assert.equal(time.dateOfEaster(1818).toString(), new CalendarDate(1818, 3, 22).toString());
             });
 
             test("Latest date of Easter", function(assert) {
-                assert.equal(time.dateOfEaster(1943).toUTCString(), new Date(1943, 3, 25).toUTCString());
+                assert.equal(time.dateOfEaster(1943).toString(), new CalendarDate(1943, 4, 25).toString());
             });
 
             test("Date of Easter on first year of Gregorian calendar", function(assert) {
-                assert.equal(time.dateOfEaster(1583).toUTCString(), new Date(1583, 3, 10).toUTCString());
+                assert.equal(time.dateOfEaster(1583).toString(), new CalendarDate(1583, 4, 10).toString());
             });
 
             test("Date of Easter before first year of Gregorian calendar", function(assert) {
@@ -82,31 +82,32 @@
             module("3 - Converting the date to the day number");
 
             test("Date to day number", function(assert) {
-                assert.equal(time.dateToDayNumber(1985, 2, 17), 48); // month <= 2
-                assert.equal(time.dateToDayNumber(1985, 11, 13), 317); // month > 2
-                assert.equal(time.dateToDayNumber(1984, 11, 13), 318); // Leap year
+                assert.equal(time.dateToDayNumber(new CalendarDate(1985, 2, 17)), 48); // month <= 2
+                assert.equal(time.dateToDayNumber(new CalendarDate(1985, 11, 13)), 317); // month > 2
+                assert.equal(time.dateToDayNumber(new CalendarDate(1984, 11, 13)), 318); // Leap year
             });
 
             test("Date to day number before Gregorian calendar", function(assert) {
                 assert.throws(
                     function() {
-                        time.dateToDayNumber(1582, 10, 14);
+                        time.dateToDayNumber(new CalendarDate(1582, 10, 14));
                     },
                     new TimeError("date must be in Gregorian Calendar, i.e. >= 1582/10/15")
                 );
             });
 
             test("Date to days elapsed since epoch", function(assert) {
-                assert.equal(time.dateToDaysElapsedSinceEpoch(1985, 2, 17), -1778); // before epoch
-                assert.equal(time.dateToDaysElapsedSinceEpoch(1989, 12, 31), 0); // epoch
-                assert.equal(time.dateToDaysElapsedSinceEpoch(1990, 1, 1), 1); // day after epoch
-                assert.equal(time.dateToDaysElapsedSinceEpoch(2016, 9, 20), 9760); // after epoch
+                assert.equal(time.dateToDaysElapsedSinceEpoch(new CalendarDate(2005, 2, 17)), -1778); // before epoch
+                assert.equal(time.dateToDaysElapsedSinceEpoch(new CalendarDate(2009, 12, 31)), 0); // epoch
+                assert.equal(time.dateToDaysElapsedSinceEpoch(new CalendarDate(2010, 1, 0)), 0); // also epoch
+                assert.equal(time.dateToDaysElapsedSinceEpoch(new CalendarDate(2010, 1, 1)), 1); // day after epoch
+                assert.equal(time.dateToDaysElapsedSinceEpoch(new CalendarDate(2016, 9, 20)), 2455); // after epoch
             });
 
-            test("Date to days elapsed since epoch before Gregorian calendar", function(assert) {
+            test("Date to days elapsed since epoch before Gregorian Calendar", function(assert) {
                 assert.throws(
                     function() {
-                        time.dateToDaysElapsedSinceEpoch(1582, 10, 14);
+                        time.dateToDaysElapsedSinceEpoch(new CalendarDate(1582, 10, 14));
                     },
                     new TimeError("date must be in Gregorian Calendar, i.e. >= 1582/10/15")
                 );
@@ -115,16 +116,55 @@
             module("4 - Julian day numbers");
 
             test("Date to julian day number", function(assert) {
-                assert.equal(time.dateToJulianDayNumber(-4712, 1, 1.5), 0);
-                assert.equal(time.dateToJulianDayNumber(1985, 2, 17.25), 2446113.75);
-                assert.equal(time.dateToJulianDayNumber(1989, 12, 31), 2447891.5);
+                assert.equal(time.dateToJulianDayNumber(new CalendarDate(-4712, 1, 1.5)), 0); // JD zero: noon January 1st 4713 BC
+                assert.equal(time.dateToJulianDayNumber(new CalendarDate(1985, 2, 17.25)), 2446113.75);
+                assert.equal(time.dateToJulianDayNumber(new CalendarDate(1989, 12, 31)), 2447891.5);
             });
 
             test("Date to modified julian day number", function(assert) {
-                assert.equal(time.dateToModifiedJulianDayNumber(-4712, 1, 1.5), -2400000.5);
-                assert.equal(time.dateToModifiedJulianDayNumber(1985, 2, 17.25), 46113.25);
-                assert.equal(time.dateToModifiedJulianDayNumber(1989, 12, 31), 47891);
+                assert.equal(time.dateToModifiedJulianDayNumber(new CalendarDate(1858, 11, 17)), 0); // MJD zero: midnight November 17th 1858
+                assert.equal(time.dateToModifiedJulianDayNumber(new CalendarDate(-4712, 1, 1.5)), -2400000.5);
+                assert.equal(time.dateToModifiedJulianDayNumber(new CalendarDate(1985, 2, 17.25)), 46113.25);
+                assert.equal(time.dateToModifiedJulianDayNumber(new CalendarDate(1989, 12, 31)), 47891);
             });
+
+            module("5 - Converting the Julian day number to the calendar date")
+
+            test("Date to julian day number", function(assert) {
+                assert.equal(time.julianDayNumberToDate(2446113.75).toString(), new CalendarDate(1985, 2, 17.25).toString());
+                assert.equal(time.julianDayNumberToDate(2299160.5).toString(), new CalendarDate(1582, 10, 15).toString());
+            });
+
+            test("Julian day before Gregorian Calendar", function(assert) {
+                assert.throws(
+                    function() {
+                        time.julianDayNumberToDate(2299160.49);
+                    },
+                    new TimeError("julian day number must be in Gregorian Calendar, i.e. >= 2299160.5")
+                );
+            });
+
+            module("6 - Finding the day of the week")
+
+            test("Date to day of week", function(assert) {
+                assert.equal(time.dateToDayOfWeek(new CalendarDate(1985, 2, 17)), "Sunday");
+                assert.equal(time.dateToDayOfWeek(new CalendarDate(1985, 2, 18)), "Monday");
+                assert.equal(time.dateToDayOfWeek(new CalendarDate(1985, 2, 19)), "Tuesday");
+                assert.equal(time.dateToDayOfWeek(new CalendarDate(1985, 2, 20)), "Wednesday");
+                assert.equal(time.dateToDayOfWeek(new CalendarDate(1985, 2, 21)), "Thursday");
+                assert.equal(time.dateToDayOfWeek(new CalendarDate(1985, 2, 22)), "Friday");
+                assert.equal(time.dateToDayOfWeek(new CalendarDate(1985, 2, 23)), "Saturday");
+            });
+
+            test("Date to day of week before Gregorian Calendar", function(assert) {
+                assert.throws(
+                    function() {
+                        time.dateToDayOfWeek(new CalendarDate(1582, 10, 14));
+                    },
+                    new TimeError("date must be in Gregorian Calendar, i.e. >= 1582/10/15")
+                );
+            });
+
 
         </script>
     </body>

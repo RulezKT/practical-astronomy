@@ -1,4 +1,4 @@
-function Time () {}
+function Time() {}
 
 function TimeError(message) {
     this.name = "TimeError";
@@ -55,78 +55,64 @@ Time.prototype.dateOfEaster = function(year) {
     var month = Math.floor((h + l - (7 * m) + 114) / 31);
     var day = ((h + l - (7 * m) + 114) % 31) + 1;
 
-    return new Date(year, month-1, day);
+    return new CalendarDate(year, month, day);
 };
 
 /*
  * 3 - Converting the date to the day number
  */
 
-Time.prototype.dateToDayNumber = function(year, month, day) {
+Time.prototype.dateToDayNumber = function(calendarDate) {
 
-    checkDateInGregorianCalendar(year, month, day);
+    checkDateInGregorianCalendar(calendarDate);
 
     var a;
     var b;
     var c
     var dayNumber;
 
-    if (month > 2) {
-        a = month + 1;
+    if (calendarDate.month > 2) {
+        a = calendarDate.month + 1;
         b = Math.floor(a * 30.6);
-        c = b - (isLeapYear(year) ? 62 : 63);
-        dayNumber = c + day;
+        c = b - (isLeapYear(calendarDate.year) ? 62 : 63);
+        dayNumber = c + calendarDate.day;
     } else {
-        a = month - 1;
+        a = calendarDate.month - 1;
         b = a * 63;
         c = Math.floor(b / 2);
-        dayNumber = c + day;
+        dayNumber = c + calendarDate.day;
     }
 
     return dayNumber;
 }
 
-Time.prototype.dateToDaysElapsedSinceEpoch = function(year, month, day) {
+Time.prototype.dateToDaysElapsedSinceEpoch = function(calendarDate) {
 
-    checkDateInGregorianCalendar(year, month, day);
+    checkDateInGregorianCalendar(calendarDate);
 
-    var daysElapsed = 0;
+    var epochJD = this.dateToJulianDayNumber(new CalendarDate(2009, 12, 31));
+    var dateJD = this.dateToJulianDayNumber(calendarDate);
 
-    if (year < 1990) {
-
-        for (var i = 1989; i >= year; i--) {
-            daysElapsed -= daysInYear(i);
-        }
-
-    } else {
-
-        for (i = 1990; i < year; i++) {
-            daysElapsed += daysInYear(i);
-        }
-    }
-
-    daysElapsed += this.dateToDayNumber(year, month, day);
-
-    return daysElapsed;
+    return dateJD - epochJD
 }
 
 /*
  * 4 - Julian day numbers
  */
 
-Time.prototype.dateToJulianDayNumber = function(year, month, day) {
+Time.prototype.dateToJulianDayNumber = function(calendarDate) {
 
-    var y = year;
-    var m = month;
+    var y = calendarDate.year;
+    var m = calendarDate.month;
 
-    if (month <= 2) {
+    if (calendarDate.month <= 2) {
         y -= 1;
         m += 12;
     }
 
     var b = 0;
 
-    if (dateInGregorianCalendar(year, month, day)) {
+    if (dateInGregorianCalendar(calendarDate)) {
         var a = Math.floor(y / 100);
         var b = (2 - a + Math.floor(a / 4));
     }
@@ -141,12 +127,80 @@ Time.prototype.dateToJulianDayNumber = function(year, month, day) {
 
     var d = Math.floor(30.6001 * (m + 1));
 
-    return b + c + d + day + 1720994.5;
+    return b + c + d + calendarDate.day + 1720994.5;
 }
 
-Time.prototype.dateToModifiedJulianDayNumber = function(year, month, day) {
+Time.prototype.dateToModifiedJulianDayNumber = function(calendarDate) {
 
-    return this.dateToJulianDayNumber(year, month, day) - 2400000.5;
+    return this.dateToJulianDayNumber(calendarDate) - 2400000.5;
+}
+
+/*
+ * 5 - Converting the Julian day number to the calendar date
+ */
+
+Time.prototype.julianDayNumberToDate = function(julianDay) {
+
+    if (julianDay < 2299160.5) {
+        throw new TimeError("julian day number must be in Gregorian Calendar, i.e. >= 2299160.5");
+    }
+
+    var i = Math.floor(julianDay + 0.5);
+    var f = (julianDay + 0.5) - i;
+
+    var a = Math.floor((i - 1867216.25) / 36524.25);
+    var b = i + 1 + a - Math.floor(a / 4);
+    var c = b + 1524;
+    var d = Math.floor((c - 122.1) / 365.25);
+    var e = Math.floor(365.25 * d);
+    var g = Math.floor((c - e) / 30.6001);
+
+    var day = c - e + f - Math.floor(30.6001 * g);
+
+    if (g < 14) {
+        var month = g - 1;
+    }
+    else {
+        var month = g - 13;
+    }
+
+    if (month > 2) {
+        var year = d - 4716;
+    }
+    else {
+        var year = d - 4715;
+    }
+
+    return new CalendarDate(year, month, day);
+}
+
+/*
+ * 6 - Finding the day of the week
+ */
+
+Time.prototype.dateToDayOfWeek = function(calendarDate) {
+
+    var daysOfWeek = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+
+    checkDateInGregorianCalendar(calendarDate);
+
+    jd = this.dateToJulianDayNumber(calendarDate);
+
+    var a = (jd + 1.5) / 7;
+
+    n = Math.round((a % 1) * 7);
+
+    return daysOfWeek[n];
+}
+
+function CalendarDate(year, month, day) {
+    this.year = year;
+    this.month = month;
+    this.day = day;
+}
+
+CalendarDate.prototype.toString = function() {
+    return this.year + "/" + this.month + "/" + this.day;
 }
 
 function checkYearInGregorianCalendar(year) {
@@ -161,8 +215,8 @@ function checkMonthInGregorianCalendar(year, month) {
     }
 }
 
-function checkDateInGregorianCalendar(year, month, day) {
-    if (!dateInGregorianCalendar(year, month, day)) {
+function checkDateInGregorianCalendar(calendarDate) {
+    if (!dateInGregorianCalendar(calendarDate)) {
         throw new TimeError("date must be in Gregorian Calendar, i.e. >= 1582/10/15");
     }
 }
@@ -175,6 +229,10 @@ function daysInYear(year) {
     return isLeapYear(year) ? 366 : 365;
 }
 
-function dateInGregorianCalendar(year, month, day) {
-    return (year > 1582 || (year == 1582 && month > 10) || (year == 1582 && month == 10 && day >= 15));
+function dateInGregorianCalendar(calendarDate) {
+    return (
+        calendarDate.year > 1582 ||
+        (calendarDate.year == 1582 && calendarDate.month > 10) ||
+        (calendarDate.year == 1582 && calendarDate.month == 10 && calendarDate.day >= 15));
 }
+
