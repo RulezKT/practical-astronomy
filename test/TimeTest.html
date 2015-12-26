@@ -183,11 +183,11 @@
             module("7 - Converting hours, minutes and seconds to decimal hours")
 
             test("Hours, minutes and seconds to decimal hours", function(assert) {
-                assert.equal(time.hoursMinutesSecondsToDecimalHours(0, 0, 0), 0);
-                assert.equal(time.hoursMinutesSecondsToDecimalHours(18, 31, 27), 18.524166666666666);
-                assert.equal(time.hoursMinutesSecondsToDecimalHours(18, 31, 30), 18.525);
-                assert.equal(time.hoursMinutesSecondsToDecimalHours(20, 0, 0), 20);
-                assert.equal(time.hoursMinutesSecondsToDecimalHours(23, 59, 59), 23.99972222222222);
+                assert.equal(time.hoursMinutesSecondsToDecimalHours(new TimeOfDay(0, 0, 0)), 0);
+                assert.equal(time.hoursMinutesSecondsToDecimalHours(new TimeOfDay(18, 31, 27)), 18.524166666666666);
+                assert.equal(time.hoursMinutesSecondsToDecimalHours(new TimeOfDay(18, 31, 30)), 18.525);
+                assert.equal(time.hoursMinutesSecondsToDecimalHours(new TimeOfDay(20, 0, 0)), 20);
+                assert.equal(time.hoursMinutesSecondsToDecimalHours(new TimeOfDay(23, 59, 59)), 23.99972222222222);
             });
 
             module("8 - Converting decimal hours to hours, minutes and seconds")
@@ -199,6 +199,26 @@
                 assert.equal(time.decimalHoursToHoursMinutesSeconds(19.99999999).toString(), new TimeOfDay(20, 0, 0).toString());
                 assert.equal(time.decimalHoursToHoursMinutesSeconds(20).toString(), new TimeOfDay(20, 0, 0).toString());
                 assert.equal(time.decimalHoursToHoursMinutesSeconds(23.99972222222222).toString(), new TimeOfDay(23, 59, 59).toString());
+            });
+
+            module("9 - Converting the local time to Universal Time (UT)")
+
+            test("Local time to universal time", function(assert) {
+                assert.equal(time.localTimeToUniversalTime( // Shift back, DST
+                    new DateAndTime(new CalendarDate(2013, 7, 1), new TimeOfDay(3, 37, 0)), 4, 1).toString(),
+                    new DateAndTime(new CalendarDate(2013, 6, 30), new TimeOfDay(22, 37, 0)).toString());
+
+                assert.equal(time.localTimeToUniversalTime( // Shift forward, no DST
+                    new DateAndTime(new CalendarDate(2015, 12, 31), new TimeOfDay(15, 50, 53)), -12, 0).toString(),
+                    new DateAndTime(new CalendarDate(2016, 1, 1), new TimeOfDay(3, 50, 53)).toString());
+
+                assert.equal(time.localTimeToUniversalTime( // No change
+                    new DateAndTime(new CalendarDate(2015, 12, 31), new TimeOfDay(15, 50, 53)), 0, 0).toString(),
+                    new DateAndTime(new CalendarDate(2015, 12, 31), new TimeOfDay(15, 50, 53)).toString());
+
+                assert.equal(time.localTimeToUniversalTime( // DST shift only
+                    new DateAndTime(new CalendarDate(2015, 12, 31), new TimeOfDay(15, 50, 53)), 0, 1).toString(),
+                    new DateAndTime(new CalendarDate(2015, 12, 31), new TimeOfDay(14, 50, 53)).toString());
             });
 
         </script>

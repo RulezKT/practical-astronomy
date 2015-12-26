@@ -206,9 +206,9 @@ Time.prototype.julianDayNumberToDayOfWeek = function(julianDayNumber) {
  * 7 - Converting hours, minutes and seconds to decimal hours
  */
 
-Time.prototype.hoursMinutesSecondsToDecimalHours = function(hours, minutes, seconds) {
+Time.prototype.hoursMinutesSecondsToDecimalHours = function(timeOfDay) {
 
-    return (((seconds / 60) + minutes) / 60) + hours;
+    return (((timeOfDay.seconds / 60) + timeOfDay.minutes) / 60) + timeOfDay.hours;
 }
 
 /*
@@ -230,6 +230,34 @@ Time.prototype.decimalHoursToHoursMinutesSeconds = function(decimalHours) {
     var hours = Math.floor(totalSeconds / 3600);
 
     return new TimeOfDay(hours, minutes, seconds);
+}
+
+/*
+ * 9 - Converting the local time to Universal Time (UT)
+ */
+
+Time.prototype.localTimeToUniversalTime = function(dateAndTime, zoneCorrection, daylightSaving) {
+
+    var calendarDate = dateAndTime.calendarDate;
+    var timeOfDay = dateAndTime.timeOfDay;
+
+    var localDecimalTime = this.hoursMinutesSecondsToDecimalHours(timeOfDay);
+    var universalDecimalTime = localDecimalTime - zoneCorrection - daylightSaving;
+    var greenwichCalendarDay = (universalDecimalTime / 24) + calendarDate.day;
+    var julianDayNumber = this.dateToJulianDayNumber(new CalendarDate(calendarDate.year, calendarDate.month, greenwichCalendarDay));
+    var greenwichCalendarDate = this.julianDayNumberToDate(julianDayNumber);
+
+    var year = greenwichCalendarDate.year;
+    var month = greenwichCalendarDate.month;
+    var decimalDay = greenwichCalendarDate.day;
+    var day = Math.floor(decimalDay);
+
+    var calendarDate = new CalendarDate(year, month, day);
+
+    var decimalUniversalTime = (decimalDay - day) * 24;
+    var timeOfDay = this.decimalHoursToHoursMinutesSeconds(decimalUniversalTime);
+
+    return new DateAndTime(calendarDate, timeOfDay);
 }
 
 function CalendarDate(year, month, day) {
@@ -254,6 +282,17 @@ function TimeOfDay(hours, minutes, seconds) {
 TimeOfDay.prototype.toString = function() {
 
     return this.hours + ":" + this.minutes + ":" + this.seconds;
+}
+
+function DateAndTime(calendarDate, timeOfDay) {
+
+    this.calendarDate = calendarDate;
+    this.timeOfDay = timeOfDay;
+}
+
+DateAndTime.prototype.toString = function() {
+
+    return this.calendarDate + " " + this.timeOfDay;
 }
 
 function checkYearInGregorianCalendar(year) {

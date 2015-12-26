@@ -22,7 +22,7 @@ Implementations of calculations from '[Practical Astronomy with your Calculator 
 | 6   | Finding the name of the day of the week                          | dateToDayOfWeek, julianDayNumberToDayOfWeek                          |
 | 7   | Converting hours, minutes and seconds to decimal hours           | hoursMinutesSecondsToDecimalHours                                    |
 | 8   | Converting decimal hours to hours, minutes and seconds           | decimalHoursToHoursMinutesSeconds                                    |
-| 9   | Converting the local time to Universal Time (UT)                 |                                                                      |
+| 9   | Converting the local time to Universal Time (UT)                 | localTimeToUniversalTime                                             |
 | 10  | Converting UT and Greenwich calendar date to local time and date |                                                                      |
 | 11  | Sidereal time (ST)                                               |                                                                      |
 | 12  | Conversion of UT to Greenwich sidereal time (GST)                |                                                                      |
