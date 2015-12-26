@@ -82,9 +82,12 @@
             module("3 - Converting the date to the day number");
 
             test("Date to day number", function(assert) {
+                assert.equal(time.dateToDayNumber(new CalendarDate(1985, 1, 1)), 1); // first day of year
                 assert.equal(time.dateToDayNumber(new CalendarDate(1985, 2, 17)), 48); // month <= 2
                 assert.equal(time.dateToDayNumber(new CalendarDate(1985, 11, 13)), 317); // month > 2
-                assert.equal(time.dateToDayNumber(new CalendarDate(1984, 11, 13)), 318); // Leap year
+                assert.equal(time.dateToDayNumber(new CalendarDate(1984, 11, 13)), 318); // month > 2, leap year
+                assert.equal(time.dateToDayNumber(new CalendarDate(1985, 12, 31)), 365); // last day of year
+                assert.equal(time.dateToDayNumber(new CalendarDate(1984, 12, 31)), 366); // last day of year, leap year
             });
 
             test("Date to day number before Gregorian calendar", function(assert) {
@@ -113,7 +116,7 @@
                 );
             });
 
-            module("4 - Julian day numbers");
+            module("4 - Julian dates");
 
             test("Date to julian day number", function(assert) {
                 assert.equal(time.dateToJulianDayNumber(new CalendarDate(-4712, 1, 1.5)), 0); // JD zero: noon January 1st 4713 BC
@@ -128,7 +131,7 @@
                 assert.equal(time.dateToModifiedJulianDayNumber(new CalendarDate(1989, 12, 31)), 47891);
             });
 
-            module("5 - Converting the Julian day number to the calendar date")
+            module("5 - Converting the Julian date to the Greenwich calendar date")
 
             test("Date to julian day number", function(assert) {
                 assert.equal(time.julianDayNumberToDate(2446113.75).toString(), new CalendarDate(1985, 2, 17.25).toString());
@@ -144,7 +147,7 @@
                 );
             });
 
-            module("6 - Finding the day of the week")
+            module("6 - Finding the name of the day of the week")
 
             test("Date to day of week", function(assert) {
                 assert.equal(time.dateToDayOfWeek(new CalendarDate(1985, 2, 17)), "Sunday");
@@ -165,6 +168,36 @@
                 );
             });
 
+            test("Julian day number to day of week", function(assert) {
+                assert.equal(time.julianDayNumberToDayOfWeek(2446113.5), "Sunday");
+                assert.equal(time.julianDayNumberToDayOfWeek(2446114.5), "Monday");
+                assert.equal(time.julianDayNumberToDayOfWeek(2446115.5), "Tuesday");
+                assert.equal(time.julianDayNumberToDayOfWeek(2446116.5), "Wednesday");
+                assert.equal(time.julianDayNumberToDayOfWeek(2446117.5), "Thursday");
+                assert.equal(time.julianDayNumberToDayOfWeek(2446118.5), "Friday");
+                assert.equal(time.julianDayNumberToDayOfWeek(2446119.5), "Saturday");
+            });
+
+            module("7 - Converting hours, minutes and seconds to decimal hours")
+
+            test("Hours, minutes and seconds to decimal hours", function(assert) {
+                assert.equal(time.hoursMinutesSecondsToDecimalHours(0, 0, 0), 0);
+                assert.equal(time.hoursMinutesSecondsToDecimalHours(18, 31, 27), 18.524166666666666);
+                assert.equal(time.hoursMinutesSecondsToDecimalHours(18, 31, 30), 18.525);
+                assert.equal(time.hoursMinutesSecondsToDecimalHours(20, 0, 0), 20);
+                assert.equal(time.hoursMinutesSecondsToDecimalHours(23, 59, 59), 23.99972222222222);
+            });
+
+            module("8 - Converting decimal hours to hours, minutes and seconds")
+
+            test("Decimal hours to hours, minutes and seconds", function(assert) {
+                assert.equal(time.decimalHoursToHoursMinutesSeconds(0).toString(), new TimeOfDay(0, 0, 0).toString());
+                assert.equal(time.decimalHoursToHoursMinutesSeconds(18.524166666666666).toString(), new TimeOfDay(18, 31, 27).toString());
+                assert.equal(time.decimalHoursToHoursMinutesSeconds(18.525).toString(), new TimeOfDay(18, 31, 30).toString());
+                assert.equal(time.decimalHoursToHoursMinutesSeconds(19.99999999).toString(), new TimeOfDay(20, 0, 0).toString());
+                assert.equal(time.decimalHoursToHoursMinutesSeconds(20).toString(), new TimeOfDay(20, 0, 0).toString());
+                assert.equal(time.decimalHoursToHoursMinutesSeconds(23.99972222222222).toString(), new TimeOfDay(23, 59, 59).toString());
+            });
 
         </script>
     </body>

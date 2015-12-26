@@ -4,32 +4,32 @@ Copyright © 2015 Wayne D Grant
 
 Licensed under the MIT License
 
-Implementations of calculations from '[Practical Astronomy With Your Calculator](https://en.wikipedia.org/wiki/Practical_Astronomy_with_your_Calculator), 3rd Edition' by Peter Duffett-Smith. Written in Javascript.
+Implementations of calculations from '[Practical Astronomy with your Calculator or Spreadsheet](https://en.wikipedia.org/wiki/Practical_Astronomy_with_your_Calculator), 4th Edition' by Peter Duffett-Smith and Jonathan Zwart. Written in Javascript.
 
-![alt tag](practical-astronomy-with-your-calculator.jpg)
+![alt tag](practical-astronomy-with-your-calculator-or-spreadsheet.jpg)
 
 ## Progress
 
 ### Time
 
-| No. | Name                                                   | Method(s)                                              |
-|-----|--------------------------------------------------------|--------------------------------------------------------|
-| 1   | Calendars                                              | daysInMonth                                            |
-| 2   | The date of Easter                                     | dateOfEaster                                           |
-| 3   | Converting the date to the day number                  | dateToDayNumber, dateToDaysElapsedSinceEpoch           |
-| 4   | Julian day numbers                                     | dateToJulianDayNumber, dateToModifiedJulianDayNumber   |
-| 5   | Converting the Julian day number to the calendar date  | julianDayNumberToDate                                  |
-| 6   | Finding the day of the week                            | dateToDayOfWeek                                        |
-| 7   | Converting hours, minutes and seconds to decimal hours |                                                        |
-| 8   | Converting decimal hours to hours, minutes and seconds |                                                        |
-| 9   | Converting the local time to UT                        |                                                        |
-| 10  | Converting UT to local civil time                      |                                                        |
-| 11  | Sidereal time (ST)                                     |                                                        |
-| 12  | Conversion of UT to GST                                |                                                        |
-| 13  | Conversion of GST to UT                                |                                                        |
-| 14  | Local Sidereal time (LST)                              |                                                        |
-| 15  | Converting LST to GST                                  |                                                        |
-| 16  | Ephermeris time (ET) and terrestial dynamic time (TDT) |                                                        |
+| No. | Name                                                             | Method(s)                                                            |
+|-----|------------------------------------------------------------------|----------------------------------------------------------------------|
+| 1   | Calendars                                                        | daysInMonth                                                          |
+| 2   | The date of Easter                                               | dateOfEaster                                                         |
+| 3   | Converting the date to the day number                            | dateToDayNumber, dateToDaysElapsedSinceEpoch                         |
+| 4   | Julian dates                                                     | dateToJulianDayNumber, dateToModifiedJulianDayNumber                 |
+| 5   | Converting the Julian date to the Greenwich calendar date        | julianDayNumberToDate                                                |
+| 6   | Finding the name of the day of the week                          | dateToDayOfWeek, julianDayNumberToDayOfWeek                          |
+| 7   | Converting hours, minutes and seconds to decimal hours           | hoursMinutesSecondsToDecimalHours, decimalHoursToHoursMinutesSeconds |
+| 8   | Converting decimal hours to hours, minutes and seconds           |                                                                      |
+| 9   | Converting the local time to Universal Time (UT)                 |                                                                      |
+| 10  | Converting UT and Greenwich calendar date to local time and date |                                                                      |
+| 11  | Sidereal time (ST)                                               |                                                                      |
+| 12  | Conversion of UT to Greenwich sidereal time (GST)                |                                                                      |
+| 13  | Conversion of GST to UT                                          |                                                                      |
+| 14  | Local sidereal time (LST)                                        |                                                                      |
+| 15  | Converting LST to GST                                            |                                                                      |
+| 16  | Ephermeris time (ET) and terrestial time (TT)                    |                                                                      |
 
 ### Coordinate Systems
 
@@ -57,7 +57,7 @@ Implementations of calculations from '[Practical Astronomy With Your Calculator]
 | 36  | Aberration                                                                   |                                                        |
 | 37  | Refraction                                                                   |                                                        |
 | 38  | Geocentric parallax and the figure of the Earth                              |                                                        |
-| 39  | Calculating correction for parallax                                          |                                                        |
+| 39  | Calculating corrections for parallax                                         |                                                        |
 | 40  | Heliographic coordinates                                                     |                                                        |
 | 41  | Carrington rotation numbers                                                  |                                                        |
 | 42  | Selenographic coordinates                                                    |                                                        |
