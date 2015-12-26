@@ -260,6 +260,33 @@ Time.prototype.localTimeToUniversalTime = function(dateAndTime, zoneCorrection, 
     return new DateAndTime(calendarDate, timeOfDay);
 }
 
+/*
+ * 10 - Converting UT and Greenwich calendar date to local time and date
+ */
+
+Time.prototype.universalTimeToLocalTime = function(dateAndTime, zoneCorrection, daylightSaving) {
+
+    var calendarDate = dateAndTime.calendarDate;
+    var timeOfDay = dateAndTime.timeOfDay;
+
+    var universalDecimalTime = this.hoursMinutesSecondsToDecimalHours(timeOfDay);
+    var localDecimalTime = universalDecimalTime + zoneCorrection + daylightSaving;
+    var julianDayNumber = this.dateToJulianDayNumber(new CalendarDate(calendarDate.year, calendarDate.month, calendarDate.day)) + (localDecimalTime / 24);
+    var greenwichCalendarDate = this.julianDayNumberToDate(julianDayNumber);
+
+    var year = greenwichCalendarDate.year;
+    var month = greenwichCalendarDate.month;
+    var decimalDay = greenwichCalendarDate.day;
+    var day = Math.floor(decimalDay);
+
+    var calendarDate = new CalendarDate(year, month, day);
+
+    var decimalUniversalTime = (decimalDay - day) * 24;
+    var timeOfDay = this.decimalHoursToHoursMinutesSeconds(decimalUniversalTime);
+
+    return new DateAndTime(calendarDate, timeOfDay);
+}
+
 function CalendarDate(year, month, day) {
 
     this.year = year;
@@ -269,7 +296,7 @@ function CalendarDate(year, month, day) {
 
 CalendarDate.prototype.toString = function() {
 
-    return this.year + "/" + this.month + "/" + this.day;
+    return this.year + "/" + zeroPad(this.month, 2) + "/" + zeroPad(this.day, 2);
 }
 
 function TimeOfDay(hours, minutes, seconds) {
@@ -281,7 +308,7 @@ function TimeOfDay(hours, minutes, seconds) {
 
 TimeOfDay.prototype.toString = function() {
 
-    return this.hours + ":" + this.minutes + ":" + this.seconds;
+    return zeroPad(this.hours, 2) + ":" + zeroPad(this.minutes, 2) + ":" + zeroPad(this.seconds, 2);
 }
 
 function DateAndTime(calendarDate, timeOfDay) {
@@ -334,3 +361,13 @@ function dateInGregorianCalendar(calendarDate) {
         (calendarDate.year == 1582 && calendarDate.month == 10 && calendarDate.day >= 15));
 }
 
+function zeroPad(number, size) {
+
+    var padded = "" + number;
+
+    while (padded.length < size) {
+        padded = "0" + padded;
+    }
+
+    return padded;
+}

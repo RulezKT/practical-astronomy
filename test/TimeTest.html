@@ -221,6 +221,26 @@
                     new DateAndTime(new CalendarDate(2015, 12, 31), new TimeOfDay(14, 50, 53)).toString());
             });
 
+            module("10 - Converting UT and Greenwich calendar date to local time and date")
+
+            test("Universal time to local time", function(assert) {
+                assert.equal(time.universalTimeToLocalTime( // Shift forward, DST
+                    new DateAndTime(new CalendarDate(2013, 6, 30), new TimeOfDay(22, 37, 0)), 4, 1).toString(),
+                    new DateAndTime(new CalendarDate(2013, 7, 1), new TimeOfDay(3, 37, 0)).toString());
+
+                assert.equal(time.universalTimeToLocalTime( // Shift back, no DST
+                    new DateAndTime(new CalendarDate(2016, 1, 1), new TimeOfDay(3, 50, 53)), -12, 0).toString(),
+                    new DateAndTime(new CalendarDate(2015, 12, 31), new TimeOfDay(15, 50, 53)).toString());
+
+                assert.equal(time.universalTimeToLocalTime( // No change
+                    new DateAndTime(new CalendarDate(2015, 12, 31), new TimeOfDay(15, 50, 53)), 0, 0).toString(),
+                    new DateAndTime(new CalendarDate(2015, 12, 31), new TimeOfDay(15, 50, 53)).toString());
+
+                assert.equal(time.universalTimeToLocalTime( // DST shift only
+                    new DateAndTime(new CalendarDate(2015, 12, 31), new TimeOfDay(14, 50, 53)), 0, 1).toString(),
+                    new DateAndTime(new CalendarDate(2015, 12, 31), new TimeOfDay(15, 50, 53)).toString());
+            });
+
         </script>
     </body>
 </html>
