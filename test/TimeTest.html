@@ -204,42 +204,64 @@
             module("9 - Converting the local time to Universal Time (UT)")
 
             test("Local time to universal time", function(assert) {
-                assert.equal(time.localTimeToUniversalTime( // Shift back, DST
-                    new DateAndTime(new CalendarDate(2013, 7, 1), new TimeOfDay(3, 37, 0)), 4, 1).toString(),
+                assert.equal(
+                    time.localTimeToUniversalTime( // Shift back, DST
+                        new DateAndTime(new CalendarDate(2013, 7, 1), new TimeOfDay(3, 37, 0)), 4, 1).toString(),
                     new DateAndTime(new CalendarDate(2013, 6, 30), new TimeOfDay(22, 37, 0)).toString());
 
-                assert.equal(time.localTimeToUniversalTime( // Shift forward, no DST
-                    new DateAndTime(new CalendarDate(2015, 12, 31), new TimeOfDay(15, 50, 53)), -12, 0).toString(),
+                assert.equal(
+                    time.localTimeToUniversalTime( // Shift forward, no DST
+                        new DateAndTime(new CalendarDate(2015, 12, 31), new TimeOfDay(15, 50, 53)), -12, 0).toString(),
                     new DateAndTime(new CalendarDate(2016, 1, 1), new TimeOfDay(3, 50, 53)).toString());
 
-                assert.equal(time.localTimeToUniversalTime( // No change
-                    new DateAndTime(new CalendarDate(2015, 12, 31), new TimeOfDay(15, 50, 53)), 0, 0).toString(),
+                assert.equal(
+                    time.localTimeToUniversalTime( // No change
+                        new DateAndTime(new CalendarDate(2015, 12, 31), new TimeOfDay(15, 50, 53)), 0, 0).toString(),
                     new DateAndTime(new CalendarDate(2015, 12, 31), new TimeOfDay(15, 50, 53)).toString());
 
-                assert.equal(time.localTimeToUniversalTime( // DST shift only
-                    new DateAndTime(new CalendarDate(2015, 12, 31), new TimeOfDay(15, 50, 53)), 0, 1).toString(),
+                assert.equal(
+                    time.localTimeToUniversalTime( // DST shift only
+                        new DateAndTime(new CalendarDate(2015, 12, 31), new TimeOfDay(15, 50, 53)), 0, 1).toString(),
                     new DateAndTime(new CalendarDate(2015, 12, 31), new TimeOfDay(14, 50, 53)).toString());
             });
 
             module("10 - Converting UT and Greenwich calendar date to local time and date")
 
             test("Universal time to local time", function(assert) {
-                assert.equal(time.universalTimeToLocalTime( // Shift forward, DST
-                    new DateAndTime(new CalendarDate(2013, 6, 30), new TimeOfDay(22, 37, 0)), 4, 1).toString(),
+                assert.equal(
+                    time.universalTimeToLocalTime( // Shift forward, DST
+                        new DateAndTime(new CalendarDate(2013, 6, 30), new TimeOfDay(22, 37, 0)), 4, 1).toString(),
                     new DateAndTime(new CalendarDate(2013, 7, 1), new TimeOfDay(3, 37, 0)).toString());
 
-                assert.equal(time.universalTimeToLocalTime( // Shift back, no DST
-                    new DateAndTime(new CalendarDate(2016, 1, 1), new TimeOfDay(3, 50, 53)), -12, 0).toString(),
+                assert.equal(
+                    time.universalTimeToLocalTime( // Shift back, no DST
+                        new DateAndTime(new CalendarDate(2016, 1, 1), new TimeOfDay(3, 50, 53)), -12, 0).toString(),
                     new DateAndTime(new CalendarDate(2015, 12, 31), new TimeOfDay(15, 50, 53)).toString());
 
-                assert.equal(time.universalTimeToLocalTime( // No change
-                    new DateAndTime(new CalendarDate(2015, 12, 31), new TimeOfDay(15, 50, 53)), 0, 0).toString(),
+                assert.equal(
+                    time.universalTimeToLocalTime( // No change
+                        new DateAndTime(new CalendarDate(2015, 12, 31), new TimeOfDay(15, 50, 53)), 0, 0).toString(),
                     new DateAndTime(new CalendarDate(2015, 12, 31), new TimeOfDay(15, 50, 53)).toString());
 
                 assert.equal(time.universalTimeToLocalTime( // DST shift only
                     new DateAndTime(new CalendarDate(2015, 12, 31), new TimeOfDay(14, 50, 53)), 0, 1).toString(),
                     new DateAndTime(new CalendarDate(2015, 12, 31), new TimeOfDay(15, 50, 53)).toString());
             });
+
+            module("12 - Conversion of UT to Greenwich sidereal time (GST)")
+
+            test("Universal time to greenwich sidereal time", function(assert) {
+                assert.equal(
+                    time.universalTimeToGreenwichSiderealTime(
+                        new DateAndTime(new CalendarDate(1980, 4, 22), new TimeOfDay(14, 36, 51.67))).toString(),
+                    new TimeOfDay(4, 40, 5.23).toString());
+            });
+
+            module("13 - Conversion of GST to UT")
+
+            module("14 - Local sidereal time (LST)")
+
+            module("15 - Converting LST to GST")
 
         </script>
     </body>

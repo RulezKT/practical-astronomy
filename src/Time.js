@@ -218,7 +218,7 @@ Time.prototype.hoursMinutesSecondsToDecimalHours = function(timeOfDay) {
 Time.prototype.decimalHoursToHoursMinutesSeconds = function(decimalHours) {
 
     var totalSeconds = decimalHours * 3600;
-    var seconds = Math.round(totalSeconds % 60, 2);
+    var seconds = parseFloat(totalSeconds % 60, 2).toFixed(2);
 
     if (seconds == 60) {
         seconds = 0;
@@ -287,6 +287,39 @@ Time.prototype.universalTimeToLocalTime = function(dateAndTime, zoneCorrection, 
     return new DateAndTime(calendarDate, timeOfDay);
 }
 
+/*
+ * 12 - Conversion of UT to Greenwich sidereal time (GST)
+ */
+
+Time.prototype.universalTimeToGreenwichSiderealTime = function(dateAndTime) {
+
+    var julianDayNumber = this.dateToJulianDayNumber(dateAndTime.calendarDate);
+    var s = julianDayNumber - 2451545;
+    var t = s / 36525;
+    var t0 = 6.697374558 + (2400.051336 * t) + (0.000025862 * t * t);
+    t0 = t0 - (24 * Math.floor(t0 / 24));
+
+    var ut = this.hoursMinutesSecondsToDecimalHours(dateAndTime.timeOfDay);
+    var a = ut * 1.002737909;
+
+    var gst = t0 + a;
+    gst = gst - (24 * Math.floor(gst / 24));
+
+    return this.decimalHoursToHoursMinutesSeconds(gst);
+}
+
+/*
+ * 13 - Conversion of GST to UT
+ */
+
+/*
+ * 14 - Local sidereal time (LST)
+ */
+
+/*
+ * 15 - Converting LST to GST
+ */
+
 function CalendarDate(year, month, day) {
 
     this.year = year;
@@ -308,7 +341,12 @@ function TimeOfDay(hours, minutes, seconds) {
 
 TimeOfDay.prototype.toString = function() {
 
-    return zeroPad(this.hours, 2) + ":" + zeroPad(this.minutes, 2) + ":" + zeroPad(this.seconds, 2);
+    var hours = zeroPad(this.hours, 2);
+    var minutes = zeroPad(this.minutes, 2);
+    var seconds = zeroPad(Math.floor(this.seconds), 2);
+    var milliseconds = zeroPad(Math.round((this.seconds % 1) * 1000), 3);
+
+    return hours + ":" + minutes + ":" + seconds + "." + milliseconds;
 }
 
 function DateAndTime(calendarDate, timeOfDay) {
