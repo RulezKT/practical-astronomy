@@ -344,7 +344,11 @@ Time.prototype.greenwichSiderealTimeToLocalSiderealTime = function(timeOfDay, lo
 
 Time.prototype.localSiderealTimeToGreenwichSiderealTime = function(timeOfDay, longitude) {
 
-    return new TimeOfDay(4, 40, 5.23);
+    var lst = this.hoursMinutesSecondsToDecimalHours(timeOfDay);
+    var offset = longitude / 15;
+    var gst = reduceValueToZeroToRange((lst - offset), 24);
+
+    return this.decimalHoursToHoursMinutesSeconds(gst);
 }
 
 function CalendarDate(year, month, day) {
