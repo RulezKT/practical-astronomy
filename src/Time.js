@@ -297,13 +297,13 @@ Time.prototype.universalTimeToGreenwichSiderealTime = function(dateAndTime) {
     var s = julianDayNumber - 2451545;
     var t = s / 36525;
     var t0 = 6.697374558 + (2400.051336 * t) + (0.000025862 * t * t);
-    t0 = t0 - (24 * Math.floor(t0 / 24));
+    t0 = reduceValueToZeroToRange(t0, 24);
 
     var ut = this.hoursMinutesSecondsToDecimalHours(dateAndTime.timeOfDay);
     var a = ut * 1.002737909;
 
     var gst = t0 + a;
-    gst = gst - (24 * Math.floor(gst / 24));
+    gst = reduceValueToZeroToRange(gst, 24);
 
     return this.decimalHoursToHoursMinutesSeconds(gst);
 }
@@ -311,6 +311,28 @@ Time.prototype.universalTimeToGreenwichSiderealTime = function(dateAndTime) {
 /*
  * 13 - Conversion of GST to UT
  */
+
+Time.prototype.greenwichSiderealTimeToUniversalTime = function(dateAndTime) {
+
+    var julianDayNumber = this.dateToJulianDayNumber(dateAndTime.calendarDate);
+    var s = julianDayNumber - 2451545;
+    var t = s / 36525;
+    var t0 = 6.697374558 + (2400.051336 * t) + (0.000025862 * t * t);
+    t0 = reduceValueToZeroToRange(t0, 24);
+
+    var gst = this.hoursMinutesSecondsToDecimalHours(dateAndTime.timeOfDay);
+
+    var a = gst - t0;
+    var b = reduceValueToZeroToRange(a, 24);
+
+    var ut = b * 0.9972695663;
+
+    if (ut < 0.065574) {
+        // TODO - flag ambiguous result?
+    }
+
+    return this.decimalHoursToHoursMinutesSeconds(ut);
+}
 
 /*
  * 14 - Local sidereal time (LST)
@@ -389,6 +411,11 @@ function isLeapYear(year) {
 function daysInYear(year) {
 
     return isLeapYear(year) ? 366 : 365;
+}
+
+function reduceValueToZeroToRange(value, range) {
+
+    return value - (range * Math.floor(value / range));
 }
 
 function dateInGregorianCalendar(calendarDate) {

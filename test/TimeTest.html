@@ -259,6 +259,13 @@
 
             module("13 - Conversion of GST to UT")
 
+            test("Greenwich sidereal time to universal time", function(assert) {
+                assert.equal(
+                    time.greenwichSiderealTimeToUniversalTime(
+                        new DateAndTime(new CalendarDate(1980, 4, 22), new TimeOfDay(4, 40, 5.23))).toString(),
+                    new TimeOfDay(14, 36, 51.67).toString());
+            });
+
             module("14 - Local sidereal time (LST)")
 
             module("15 - Converting LST to GST")
