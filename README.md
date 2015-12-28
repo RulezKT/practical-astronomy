@@ -27,8 +27,8 @@ Implementations of calculations from '[Practical Astronomy with your Calculator 
 | 11  | Sidereal time (ST)                                               | N/A                                                                  |
 | 12  | Conversion of UT to Greenwich sidereal time (GST)                | universalTimeToGreenwichSiderealTime                                 |
 | 13  | Conversion of GST to UT                                          | greenwichSiderealTimeToUniversalTime                                 |
-| 14  | Local sidereal time (LST)                                        |                                                                      |
-| 15  | Converting LST to GST                                            |                                                                      |
+| 14  | Local sidereal time (LST)                                        | greenwichSiderealTimeToLocalSiderealTime                             |
+| 15  | Converting LST to GST                                            | localSiderealTimeToGreenwichSiderealTime                             |
 | 16  | Ephermeris time (ET) and terrestial time (TT)                    | N/A                                                                  |
 
 ### Coordinate Systems

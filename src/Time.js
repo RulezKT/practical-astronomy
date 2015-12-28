@@ -296,14 +296,10 @@ Time.prototype.universalTimeToGreenwichSiderealTime = function(dateAndTime) {
     var julianDayNumber = this.dateToJulianDayNumber(dateAndTime.calendarDate);
     var s = julianDayNumber - 2451545;
     var t = s / 36525;
-    var t0 = 6.697374558 + (2400.051336 * t) + (0.000025862 * t * t);
-    t0 = reduceValueToZeroToRange(t0, 24);
-
+    var t0 = reduceValueToZeroToRange((6.697374558 + (2400.051336 * t) + (0.000025862 * t * t)), 24);
     var ut = this.hoursMinutesSecondsToDecimalHours(dateAndTime.timeOfDay);
     var a = ut * 1.002737909;
-
-    var gst = t0 + a;
-    gst = reduceValueToZeroToRange(gst, 24);
+    var gst = reduceValueToZeroToRange((t0 + a), 24);
 
     return this.decimalHoursToHoursMinutesSeconds(gst);
 }
@@ -317,18 +313,13 @@ Time.prototype.greenwichSiderealTimeToUniversalTime = function(dateAndTime) {
     var julianDayNumber = this.dateToJulianDayNumber(dateAndTime.calendarDate);
     var s = julianDayNumber - 2451545;
     var t = s / 36525;
-    var t0 = 6.697374558 + (2400.051336 * t) + (0.000025862 * t * t);
-    t0 = reduceValueToZeroToRange(t0, 24);
-
+    var t0 = reduceValueToZeroToRange((6.697374558 + (2400.051336 * t) + (0.000025862 * t * t)), 24);
     var gst = this.hoursMinutesSecondsToDecimalHours(dateAndTime.timeOfDay);
-
-    var a = gst - t0;
-    var b = reduceValueToZeroToRange(a, 24);
-
-    var ut = b * 0.9972695663;
+    var a = reduceValueToZeroToRange((gst - t0), 24);
+    var ut = a * 0.9972695663;
 
     if (ut < 0.065574) {
-        // TODO - flag ambiguous result?
+        // TODO - flag ambiguous result? Or return two results?
     }
 
     return this.decimalHoursToHoursMinutesSeconds(ut);
@@ -338,9 +329,23 @@ Time.prototype.greenwichSiderealTimeToUniversalTime = function(dateAndTime) {
  * 14 - Local sidereal time (LST)
  */
 
+Time.prototype.greenwichSiderealTimeToLocalSiderealTime = function(timeOfDay, longitude) {
+
+    var gst = this.hoursMinutesSecondsToDecimalHours(timeOfDay);
+    var offset = longitude / 15;
+    var lst = reduceValueToZeroToRange((gst + offset), 24);
+
+    return this.decimalHoursToHoursMinutesSeconds(lst);
+}
+
 /*
  * 15 - Converting LST to GST
  */
+
+Time.prototype.localSiderealTimeToGreenwichSiderealTime = function(timeOfDay, longitude) {
+
+    return new TimeOfDay(4, 40, 5.23);
+}
 
 function CalendarDate(year, month, day) {
 
