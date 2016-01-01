@@ -260,10 +260,45 @@
             module("13 - Conversion of GST to UT")
 
             test("Greenwich sidereal time to universal time", function(assert) {
+
                 assert.equal(
                     time.greenwichSiderealTimeToUniversalTime(
                         new DateAndTime(new CalendarDate(1980, 4, 22), new TimeOfDay(4, 40, 5.23))).toString(),
                     new TimeOfDay(14, 36, 51.67).toString());
+
+                assert.equal( // Just before ambiguity period for this day
+                    time.greenwichSiderealTimeToUniversalTime(
+                        new DateAndTime(new CalendarDate(1980, 4, 22), new TimeOfDay(14, 0, 49))).toString(),
+                    new TimeOfDay(23, 56, 3.58).toString());
+
+                assert.equal( // Just after ambiguity period for this day
+                    time.greenwichSiderealTimeToUniversalTime(
+                        new DateAndTime(new CalendarDate(1980, 4, 22), new TimeOfDay(14, 4, 47))).toString(),
+                    new TimeOfDay(0, 3, 56.84).toString());
+            });
+
+            test("Greenwich sidereal time at beginning of ambiguous period to universal time", function(assert) {
+                var universalTimes = time.greenwichSiderealTimeToUniversalTime(
+                    new DateAndTime(new CalendarDate(1980, 4, 22), new TimeOfDay(14, 0, 50)));
+
+                assert.equal(universalTimes[0].toString(), new TimeOfDay(0, 0, 0.49).toString());
+                assert.equal(universalTimes[1].toString(), new TimeOfDay(23, 56, 4.42).toString());
+            });
+
+            test("Greenwich sidereal time during ambiguous period to universal time", function(assert) {
+                var universalTimes = time.greenwichSiderealTimeToUniversalTime(
+                    new DateAndTime(new CalendarDate(1980, 4, 22), new TimeOfDay(14, 2, 0)));
+
+                assert.equal(universalTimes[0].toString(), new TimeOfDay(0, 1, 10.29).toString());
+                assert.equal(universalTimes[1].toString(), new TimeOfDay(23, 57, 14.23).toString());
+            });
+
+            test("Greenwich sidereal time at end of ambiguous period to universal time", function(assert) {
+                var universalTimes = time.greenwichSiderealTimeToUniversalTime(
+                    new DateAndTime(new CalendarDate(1980, 4, 22), new TimeOfDay(14, 4, 46)));
+
+                assert.equal(universalTimes[0].toString(), new TimeOfDay(0, 3, 55.84).toString());
+                assert.equal(universalTimes[1].toString(), new TimeOfDay(23, 59, 59.77).toString());
             });
 
             module("14 - Local sidereal time (LST)")

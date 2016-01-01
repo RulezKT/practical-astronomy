@@ -318,11 +318,11 @@ Time.prototype.greenwichSiderealTimeToUniversalTime = function(dateAndTime) {
     var a = reduceValueToZeroToRange((gst - t0), 24);
     var ut = a * 0.9972695663;
 
-    if (ut < 0.065574) {
-        // TODO - flag ambiguous result? Or return two results?
+    if (ut < 0.065574) { // There are two possible values for UT for the given GST values
+        return [this.decimalHoursToHoursMinutesSeconds(ut), this.decimalHoursToHoursMinutesSeconds(ut + 23.934426)];
+    } else {
+        return this.decimalHoursToHoursMinutesSeconds(ut);
     }
-
-    return this.decimalHoursToHoursMinutesSeconds(ut);
 }
 
 /*
