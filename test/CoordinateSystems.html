@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<!-- Copyright 2016 Wayne D Grant (www.waynedgrant.com)
+     Licensed under the MIT License -->
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>Coordinate Systems Tests</title>
+        <link rel="stylesheet" href="qunit-1.19.0.css">
+    </head>
+    <body>
+        <div id="qunit"></div>
+        <div id="qunit-fixture"></div>
+        <script src="./qunit-1.19.0.js"></script>
+        <script src="../src/CoordinateSystems.js"></script>
+        <script>
+
+            var coordinateSystems = new CoordinateSystems();
+
+            module("21 - Converting between decimal degrees and degrees minutes and seconds");
+
+            test("Decimal degrees to degrees, minutes and seconds", function(assert) {
+                assert.equal(
+                    coordinateSystems.decimalDegreesToDegreesMinutesSeconds(0).toString(),
+                    new DegreesMinutesSeconds(0, 0, 0).toString());
+
+                assert.equal(
+                    coordinateSystems.decimalDegreesToDegreesMinutesSeconds(182.22222).toString(),
+                    new DegreesMinutesSeconds(182, 13, 19.992).toString());
+
+                assert.equal(
+                    coordinateSystems.decimalDegreesToDegreesMinutesSeconds(182.5241667).toString(),
+                    new DegreesMinutesSeconds(182, 31, 27).toString());
+            });
+
+            test("Degrees, minutes and seconds to decimal degrees ", function(assert) {
+                assert.equal(
+                    coordinateSystems.degreesMinutesSecondsToDecimalDegrees(new DegreesMinutesSeconds(0, 0, 0)),
+                    0);
+
+                assert.equal(
+                    coordinateSystems.degreesMinutesSecondsToDecimalDegrees(new DegreesMinutesSeconds(182, 13, 19.992)),
+                    182.22222);
+
+                assert.equal(
+                    coordinateSystems.degreesMinutesSecondsToDecimalDegrees(new DegreesMinutesSeconds(182, 31, 27)),
+                    182.52416666666667);
+            });
+
+        </script>
+    </body>
+</html>

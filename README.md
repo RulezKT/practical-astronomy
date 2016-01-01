@@ -33,35 +33,35 @@ Implementations of calculations from '[Practical Astronomy with your Calculator 
 
 ### Coordinate Systems
 
-| No. | Name                                                                         | Method(s)                                              |
-|-----|------------------------------------------------------------------------------|--------------------------------------------------------|
-| 17  | Horizon coordinates                                                          |                                                        |
-| 18  | Equatorial coordinates                                                       |                                                        |
-| 19  | Ecliptic coordinates                                                         |                                                        |
-| 20  | Galactic coordinates                                                         |                                                        |
-| 21  | Converting between decimal degress and degrees, minutes and seconds          |                                                        |
-| 22  | Converting between angles expressed in degrees and angles expressed in hours |                                                        |
-| 23  | Converting between one coordinate system and another                         |                                                        |
-| 24  | Converting between right ascension and hour-angle                            |                                                        |
-| 25  | Equatorial to horizon coordinate conversion                                  |                                                        |
-| 26  | Horizon to equatorial coordinate conversion                                  |                                                        |
-| 27  | Ecliptic to equatorial coordinate conversion                                 |                                                        |
-| 28  | Equatorial to ecliptic coordinate conversion                                 |                                                        |
-| 29  | Equatorial to galactic coordinate conversion                                 |                                                        |
-| 30  | Galactic to equatorial coordinate conversion                                 |                                                        |
-| 31  | Generalised coordinate transformations                                       |                                                        |
-| 32  | The angle between two celestial objects                                      |                                                        |
-| 33  | Rising and setting                                                           |                                                        |
-| 34  | Precession                                                                   |                                                        |
-| 35  | Nutation                                                                     |                                                        |
-| 36  | Aberration                                                                   |                                                        |
-| 37  | Refraction                                                                   |                                                        |
-| 38  | Geocentric parallax and the figure of the Earth                              |                                                        |
-| 39  | Calculating corrections for parallax                                         |                                                        |
-| 40  | Heliographic coordinates                                                     |                                                        |
-| 41  | Carrington rotation numbers                                                  |                                                        |
-| 42  | Selenographic coordinates                                                    |                                                        |
-| 43  | Atmospheric extinction                                                       |                                                        |
+| No. | Name                                                                         | Method(s)                                                                    |
+|-----|------------------------------------------------------------------------------|------------------------------------------------------------------------------|
+| 17  | Horizon coordinates                                                          | N/A                                                                          |
+| 18  | Equatorial coordinates                                                       | N/A                                                                          |
+| 19  | Ecliptic coordinates                                                         | N/A                                                                          |
+| 20  | Galactic coordinates                                                         | N/A                                                                          |
+| 21  | Converting between decimal degress and degrees, minutes and seconds          | decimalDegreesToDegreesMinutesSeconds, degreesMinutesSecondsToDecimalDegrees |
+| 22  | Converting between angles expressed in degrees and angles expressed in hours |                                                                              |
+| 23  | Converting between one coordinate system and another                         |                                                                              |
+| 24  | Converting between right ascension and hour-angle                            |                                                                              |
+| 25  | Equatorial to horizon coordinate conversion                                  |                                                                              |
+| 26  | Horizon to equatorial coordinate conversion                                  |                                                                              |
+| 27  | Ecliptic to equatorial coordinate conversion                                 |                                                                              |
+| 28  | Equatorial to ecliptic coordinate conversion                                 |                                                                              |
+| 29  | Equatorial to galactic coordinate conversion                                 |                                                                              |
+| 30  | Galactic to equatorial coordinate conversion                                 |                                                                              |
+| 31  | Generalised coordinate transformations                                       |                                                                              |
+| 32  | The angle between two celestial objects                                      |                                                                              |
+| 33  | Rising and setting                                                           |                                                                              |
+| 34  | Precession                                                                   |                                                                              |
+| 35  | Nutation                                                                     |                                                                              |
+| 36  | Aberration                                                                   |                                                                              |
+| 37  | Refraction                                                                   |                                                                              |
+| 38  | Geocentric parallax and the figure of the Earth                              |                                                                              |
+| 39  | Calculating corrections for parallax                                         |                                                                              |
+| 40  | Heliographic coordinates                                                     |                                                                              |
+| 41  | Carrington rotation numbers                                                  |                                                                              |
+| 42  | Selenographic coordinates                                                    |                                                                              |
+| 43  | Atmospheric extinction                                                       |                                                                              |
 
 ### The Sun
 
