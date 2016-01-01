@@ -218,7 +218,7 @@ Time.prototype.hoursMinutesSecondsToDecimalHours = function(timeOfDay) {
 Time.prototype.decimalHoursToHoursMinutesSeconds = function(decimalHours) {
 
     var totalSeconds = decimalHours * 3600;
-    var seconds = parseFloat(totalSeconds % 60, 2).toFixed(2);
+    var seconds = parseFloat(totalSeconds % 60).toFixed(3);
 
     if (seconds == 60) {
         seconds = 0;
