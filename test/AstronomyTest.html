@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<!-- Copyright 2016 Wayne D Grant (www.waynedgrant.com)
+     Licensed under the MIT License -->
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>Time Tests</title>
+        <link rel="stylesheet" href="qunit-1.19.0.css">
+    </head>
+    <body>
+        <div id="qunit"></div>
+        <div id="qunit-fixture"></div>
+        <script src="./qunit-1.19.0.js"></script>
+        <script src="../src/Astronomy.js"></script>
+        <script>
+
+            var astronomy = new Astronomy();
+
+            module("1 - Calendars");
+
+            test("Days in month when not a leap year", function(assert) {
+                assert.equal(astronomy.daysInMonth(2015, 1), 31);
+                assert.equal(astronomy.daysInMonth(2015, 2), 28);
+                assert.equal(astronomy.daysInMonth(2015, 3), 31);
+                assert.equal(astronomy.daysInMonth(2015, 4), 30);
+                assert.equal(astronomy.daysInMonth(2015, 5), 31);
+                assert.equal(astronomy.daysInMonth(2015, 6), 30);
+                assert.equal(astronomy.daysInMonth(2015, 7), 31);
+                assert.equal(astronomy.daysInMonth(2015, 8), 31);
+                assert.equal(astronomy.daysInMonth(2015, 9), 30);
+                assert.equal(astronomy.daysInMonth(2015, 10), 31);
+                assert.equal(astronomy.daysInMonth(2015, 11), 30);
+                assert.equal(astronomy.daysInMonth(2015, 12), 31);
+            });
+
+            test("Days in February when a common leap year", function(assert) {
+                assert.equal(astronomy.daysInMonth(2016, 2), 29);
+            });
+
+            test("Days in February when a century leap year", function(assert) {
+                assert.equal(astronomy.daysInMonth(2000, 2), 29);
+            });
+
+            test("Days in February when not a century leap year", function(assert) {
+                assert.equal(astronomy.daysInMonth(1900, 2), 28);
+            });
+
+            test("Days in month before first year of Gregorian calendar", function(assert) {
+                assert.throws(
+                    function() {
+                        astronomy.daysInMonth(1582, 10);
+                    },
+                    new AstronomyError("month must be in Gregorian Calendar, i.e. >= 1582/11")
+                );
+            });
+
+            module("2 - The date of Easter");
+
+            test("Date of Easter", function(assert) {
+                assert.equal(astronomy.dateOfEaster(1974).toString(), new CalendarDate(1974, 4, 14).toString());
+            });
+
+            test("Earliest date of Easter", function(assert) {
+                assert.equal(astronomy.dateOfEaster(1818).toString(), new CalendarDate(1818, 3, 22).toString());
+            });
+
+            test("Latest date of Easter", function(assert) {
+                assert.equal(astronomy.dateOfEaster(1943).toString(), new CalendarDate(1943, 4, 25).toString());
+            });
+
+            test("Date of Easter on first year of Gregorian calendar", function(assert) {
+                assert.equal(astronomy.dateOfEaster(1583).toString(), new CalendarDate(1583, 4, 10).toString());
+            });
+
+            test("Date of Easter before first year of Gregorian calendar", function(assert) {
+                assert.throws(
+                    function() {
+                        astronomy.dateOfEaster(1582);
+                    },
+                    new AstronomyError("year must be in Gregorian Calendar, i.e. >= 1583")
+                );
+            });
+
+            module("3 - Converting the date to the day number");
+
+            test("Date to day number", function(assert) {
+                assert.equal(astronomy.dateToDayNumber(new CalendarDate(1985, 1, 1)), 1); // first day of year
+                assert.equal(astronomy.dateToDayNumber(new CalendarDate(1985, 2, 17)), 48); // month <= 2
+                assert.equal(astronomy.dateToDayNumber(new CalendarDate(1985, 11, 13)), 317); // month > 2
+                assert.equal(astronomy.dateToDayNumber(new CalendarDate(1984, 11, 13)), 318); // month > 2, leap year
+                assert.equal(astronomy.dateToDayNumber(new CalendarDate(1985, 12, 31)), 365); // last day of year
+                assert.equal(astronomy.dateToDayNumber(new CalendarDate(1984, 12, 31)), 366); // last day of year, leap year
+            });
+
+            test("Date to day number before Gregorian calendar", function(assert) {
+                assert.throws(
+                    function() {
+                        astronomy.dateToDayNumber(new CalendarDate(1582, 10, 14));
+                    },
+                    new AstronomyError("date must be in Gregorian Calendar, i.e. >= 1582/10/15")
+                );
+            });
+
+            test("Date to days elapsed since epoch", function(assert) {
+                assert.equal(astronomy.dateToDaysElapsedSinceEpoch(new CalendarDate(2005, 2, 17)), -1778); // before epoch
+                assert.equal(astronomy.dateToDaysElapsedSinceEpoch(new CalendarDate(2009, 12, 31)), 0); // epoch
+                assert.equal(astronomy.dateToDaysElapsedSinceEpoch(new CalendarDate(2010, 1, 0)), 0); // also epoch
+                assert.equal(astronomy.dateToDaysElapsedSinceEpoch(new CalendarDate(2010, 1, 1)), 1); // day after epoch
+                assert.equal(astronomy.dateToDaysElapsedSinceEpoch(new CalendarDate(2016, 9, 20)), 2455); // after epoch
+            });
+
+            test("Date to days elapsed since epoch before Gregorian Calendar", function(assert) {
+                assert.throws(
+                    function() {
+                        astronomy.dateToDaysElapsedSinceEpoch(new CalendarDate(1582, 10, 14));
+                    },
+                    new AstronomyError("date must be in Gregorian Calendar, i.e. >= 1582/10/15")
+                );
+            });
+
+            module("4 - Julian dates");
+
+            test("Date to julian day number", function(assert) {
+                assert.equal(astronomy.dateToJulianDayNumber(new CalendarDate(-4712, 1, 1.5)), 0); // JD zero: noon January 1st 4713 BC
+                assert.equal(astronomy.dateToJulianDayNumber(new CalendarDate(1985, 2, 17.25)), 2446113.75);
+                assert.equal(astronomy.dateToJulianDayNumber(new CalendarDate(1989, 12, 31)), 2447891.5);
+            });
+
+            test("Date to modified julian day number", function(assert) {
+                assert.equal(astronomy.dateToModifiedJulianDayNumber(new CalendarDate(1858, 11, 17)), 0); // MJD zero: midnight November 17th 1858
+                assert.equal(astronomy.dateToModifiedJulianDayNumber(new CalendarDate(-4712, 1, 1.5)), -2400000.5);
+                assert.equal(astronomy.dateToModifiedJulianDayNumber(new CalendarDate(1985, 2, 17.25)), 46113.25);
+                assert.equal(astronomy.dateToModifiedJulianDayNumber(new CalendarDate(1989, 12, 31)), 47891);
+            });
+
+            module("5 - Converting the Julian date to the Greenwich calendar date")
+
+            test("Date to julian day number", function(assert) {
+                assert.equal(astronomy.julianDayNumberToDate(2446113.75).toString(), new CalendarDate(1985, 2, 17.25).toString());
+                assert.equal(astronomy.julianDayNumberToDate(2299160.5).toString(), new CalendarDate(1582, 10, 15).toString());
+            });
+
+            test("Julian day before Gregorian Calendar", function(assert) {
+                assert.throws(
+                    function() {
+                        astronomy.julianDayNumberToDate(2299160.49);
+                    },
+                    new AstronomyError("julian day number must be in Gregorian Calendar, i.e. >= 2299160.5")
+                );
+            });
+
+            module("6 - Finding the name of the day of the week")
+
+            test("Date to day of week", function(assert) {
+                assert.equal(astronomy.dateToDayOfWeek(new CalendarDate(1985, 2, 17)), "Sunday");
+                assert.equal(astronomy.dateToDayOfWeek(new CalendarDate(1985, 2, 18)), "Monday");
+                assert.equal(astronomy.dateToDayOfWeek(new CalendarDate(1985, 2, 19)), "Tuesday");
+                assert.equal(astronomy.dateToDayOfWeek(new CalendarDate(1985, 2, 20)), "Wednesday");
+                assert.equal(astronomy.dateToDayOfWeek(new CalendarDate(1985, 2, 21)), "Thursday");
+                assert.equal(astronomy.dateToDayOfWeek(new CalendarDate(1985, 2, 22)), "Friday");
+                assert.equal(astronomy.dateToDayOfWeek(new CalendarDate(1985, 2, 23)), "Saturday");
+            });
+
+            test("Date to day of week before Gregorian Calendar", function(assert) {
+                assert.throws(
+                    function() {
+                        astronomy.dateToDayOfWeek(new CalendarDate(1582, 10, 14));
+                    },
+                    new AstronomyError("date must be in Gregorian Calendar, i.e. >= 1582/10/15")
+                );
+            });
+
+            test("Julian day number to day of week", function(assert) {
+                assert.equal(astronomy.julianDayNumberToDayOfWeek(2446113.5), "Sunday");
+                assert.equal(astronomy.julianDayNumberToDayOfWeek(2446114.5), "Monday");
+                assert.equal(astronomy.julianDayNumberToDayOfWeek(2446115.5), "Tuesday");
+                assert.equal(astronomy.julianDayNumberToDayOfWeek(2446116.5), "Wednesday");
+                assert.equal(astronomy.julianDayNumberToDayOfWeek(2446117.5), "Thursday");
+                assert.equal(astronomy.julianDayNumberToDayOfWeek(2446118.5), "Friday");
+                assert.equal(astronomy.julianDayNumberToDayOfWeek(2446119.5), "Saturday");
+            });
+
+            module("7 - Converting hours, minutes and seconds to decimal hours")
+
+            test("Hours, minutes and seconds to decimal hours", function(assert) {
+                assert.equal(astronomy.hoursMinutesSecondsToDecimalHours(new TimeOfDay(0, 0, 0)), 0);
+                assert.equal(astronomy.hoursMinutesSecondsToDecimalHours(new TimeOfDay(18, 31, 27)), 18.524166666666666);
+                assert.equal(astronomy.hoursMinutesSecondsToDecimalHours(new TimeOfDay(18, 31, 30)), 18.525);
+                assert.equal(astronomy.hoursMinutesSecondsToDecimalHours(new TimeOfDay(20, 0, 0)), 20);
+                assert.equal(astronomy.hoursMinutesSecondsToDecimalHours(new TimeOfDay(23, 59, 59)), 23.99972222222222);
+            });
+
+            module("8 - Converting decimal hours to hours, minutes and seconds")
+
+            test("Decimal hours to hours, minutes and seconds", function(assert) {
+                assert.equal(astronomy.decimalHoursToHoursMinutesSeconds(0).toString(), new TimeOfDay(0, 0, 0).toString());
+                assert.equal(astronomy.decimalHoursToHoursMinutesSeconds(18.524166666666666).toString(), new TimeOfDay(18, 31, 27).toString());
+                assert.equal(astronomy.decimalHoursToHoursMinutesSeconds(18.525).toString(), new TimeOfDay(18, 31, 30).toString());
+                assert.equal(astronomy.decimalHoursToHoursMinutesSeconds(19.99999999).toString(), new TimeOfDay(20, 0, 0).toString());
+                assert.equal(astronomy.decimalHoursToHoursMinutesSeconds(20).toString(), new TimeOfDay(20, 0, 0).toString());
+                assert.equal(astronomy.decimalHoursToHoursMinutesSeconds(23.99972222222222).toString(), new TimeOfDay(23, 59, 59).toString());
+            });
+
+            module("9 - Converting the local time to Universal Time (UT)")
+
+            test("Local time to universal time", function(assert) {
+                assert.equal(
+                    astronomy.localTimeToUniversalTime( // Shift back, DST
+                        new DateAndTime(new CalendarDate(2013, 7, 1), new TimeOfDay(3, 37, 0)), 4, 1).toString(),
+                    new DateAndTime(new CalendarDate(2013, 6, 30), new TimeOfDay(22, 37, 0)).toString());
+
+                assert.equal(
+                    astronomy.localTimeToUniversalTime( // Shift forward, no DST
+                        new DateAndTime(new CalendarDate(2015, 12, 31), new TimeOfDay(15, 50, 53)), -12, 0).toString(),
+                    new DateAndTime(new CalendarDate(2016, 1, 1), new TimeOfDay(3, 50, 53)).toString());
+
+                assert.equal(
+                    astronomy.localTimeToUniversalTime( // No change
+                        new DateAndTime(new CalendarDate(2015, 12, 31), new TimeOfDay(15, 50, 53)), 0, 0).toString(),
+                    new DateAndTime(new CalendarDate(2015, 12, 31), new TimeOfDay(15, 50, 53)).toString());
+
+                assert.equal(
+                    astronomy.localTimeToUniversalTime( // DST shift only
+                        new DateAndTime(new CalendarDate(2015, 12, 31), new TimeOfDay(15, 50, 53)), 0, 1).toString(),
+                    new DateAndTime(new CalendarDate(2015, 12, 31), new TimeOfDay(14, 50, 53)).toString());
+            });
+
+            module("10 - Converting UT and Greenwich calendar date to local time and date")
+
+            test("Universal time to local time", function(assert) {
+                assert.equal(
+                    astronomy.universalTimeToLocalTime( // Shift forward, DST
+                        new DateAndTime(new CalendarDate(2013, 6, 30), new TimeOfDay(22, 37, 0)), 4, 1).toString(),
+                    new DateAndTime(new CalendarDate(2013, 7, 1), new TimeOfDay(3, 37, 0)).toString());
+
+                assert.equal(
+                    astronomy.universalTimeToLocalTime( // Shift back, no DST
+                        new DateAndTime(new CalendarDate(2016, 1, 1), new TimeOfDay(3, 50, 53)), -12, 0).toString(),
+                    new DateAndTime(new CalendarDate(2015, 12, 31), new TimeOfDay(15, 50, 53)).toString());
+
+                assert.equal(
+                    astronomy.universalTimeToLocalTime( // No change
+                        new DateAndTime(new CalendarDate(2015, 12, 31), new TimeOfDay(15, 50, 53)), 0, 0).toString(),
+                    new DateAndTime(new CalendarDate(2015, 12, 31), new TimeOfDay(15, 50, 53)).toString());
+
+                assert.equal(astronomy.universalTimeToLocalTime( // DST shift only
+                    new DateAndTime(new CalendarDate(2015, 12, 31), new TimeOfDay(14, 50, 53)), 0, 1).toString(),
+                    new DateAndTime(new CalendarDate(2015, 12, 31), new TimeOfDay(15, 50, 53)).toString());
+            });
+
+            module("12 - Conversion of UT to Greenwich sidereal time (GST)")
+
+            test("Universal time to greenwich sidereal time", function(assert) {
+                assert.equal(
+                    astronomy.universalTimeToGreenwichSiderealTime(
+                        new DateAndTime(new CalendarDate(1980, 4, 22), new TimeOfDay(14, 36, 51.67))).toString(),
+                    new TimeOfDay(4, 40, 5.23).toString());
+            });
+
+            module("13 - Conversion of GST to UT")
+
+            test("Greenwich sidereal time to universal time", function(assert) {
+
+                assert.equal(
+                    astronomy.greenwichSiderealTimeToUniversalTime(
+                        new DateAndTime(new CalendarDate(1980, 4, 22), new TimeOfDay(4, 40, 5.23))).toString(),
+                    new TimeOfDay(14, 36, 51.67).toString());
+
+                assert.equal( // Just before ambiguity period for this day
+                    astronomy.greenwichSiderealTimeToUniversalTime(
+                        new DateAndTime(new CalendarDate(1980, 4, 22), new TimeOfDay(14, 0, 49))).toString(),
+                    new TimeOfDay(23, 56, 3.578).toString());
+
+                assert.equal( // Just after ambiguity period for this day
+                    astronomy.greenwichSiderealTimeToUniversalTime(
+                        new DateAndTime(new CalendarDate(1980, 4, 22), new TimeOfDay(14, 4, 47))).toString(),
+                    new TimeOfDay(0, 3, 56.838).toString());
+            });
+
+            test("Greenwich sidereal time at beginning of ambiguous period to universal time", function(assert) {
+                var universalTimes = astronomy.greenwichSiderealTimeToUniversalTime(
+                    new DateAndTime(new CalendarDate(1980, 4, 22), new TimeOfDay(14, 0, 50)));
+
+                assert.equal(universalTimes[0].toString(), new TimeOfDay(0, 0, 0.485).toString());
+                assert.equal(universalTimes[1].toString(), new TimeOfDay(23, 56, 4.419).toString());
+            });
+
+            test("Greenwich sidereal time during ambiguous period to universal time", function(assert) {
+                var universalTimes = astronomy.greenwichSiderealTimeToUniversalTime(
+                    new DateAndTime(new CalendarDate(1980, 4, 22), new TimeOfDay(14, 2, 0)));
+
+                assert.equal(universalTimes[0].toString(), new TimeOfDay(0, 1, 10.294).toString());
+                assert.equal(universalTimes[1].toString(), new TimeOfDay(23, 57, 14.228).toString());
+            });
+
+            test("Greenwich sidereal time at end of ambiguous period to universal time", function(assert) {
+                var universalTimes = astronomy.greenwichSiderealTimeToUniversalTime(
+                    new DateAndTime(new CalendarDate(1980, 4, 22), new TimeOfDay(14, 4, 46)));
+
+                assert.equal(universalTimes[0].toString(), new TimeOfDay(0, 3, 55.841).toString());
+                assert.equal(universalTimes[1].toString(), new TimeOfDay(23, 59, 59.774).toString());
+            });
+
+            module("14 - Local sidereal time (LST)")
+
+            test("Greenwich sidereal time to local sidereal time", function(assert) {
+
+                assert.equal( // Shift back
+                    astronomy.greenwichSiderealTimeToLocalSiderealTime(new TimeOfDay(4, 40, 5.23), -64).toString(),
+                    new TimeOfDay(0, 24, 5.23).toString());
+
+                assert.equal( // No change
+                    astronomy.greenwichSiderealTimeToLocalSiderealTime(new TimeOfDay(4, 40, 5.23), 0).toString(),
+                    new TimeOfDay(4, 40, 5.23).toString());
+
+                assert.equal( // Shift forward
+                    astronomy.greenwichSiderealTimeToLocalSiderealTime(new TimeOfDay(4, 40, 5.23), 64).toString(),
+                    new TimeOfDay(8, 56, 5.23).toString());
+            });
+
+            module("15 - Converting LST to GST")
+
+            test("Local sidereal time to greenwich sidereal time", function(assert) {
+
+                assert.equal( // Shift back
+                    astronomy.localSiderealTimeToGreenwichSiderealTime(new TimeOfDay(8, 56, 5.23), 64).toString(),
+                    new TimeOfDay(4, 40, 5.23).toString());
+
+                assert.equal( // No change
+                    astronomy.localSiderealTimeToGreenwichSiderealTime(new TimeOfDay(4, 40, 5.23), 0).toString(),
+                    new TimeOfDay(4, 40, 5.23).toString());
+
+                assert.equal( // Shift forward
+                    astronomy.localSiderealTimeToGreenwichSiderealTime(new TimeOfDay(0, 24, 5.23), -64).toString(),
+                    new TimeOfDay(4, 40, 5.23).toString());
+            });
+
+            module("21 - Converting between decimal degrees and degrees minutes and seconds");
+
+            test("Decimal degrees to degrees, minutes and seconds", function(assert) {
+                assert.equal(
+                    astronomy.decimalDegreesToDegreesMinutesSeconds(0).toString(),
+                    new DegreesMinutesSeconds(0, 0, 0).toString());
+
+                assert.equal(
+                    astronomy.decimalDegreesToDegreesMinutesSeconds(182.22222).toString(),
+                    new DegreesMinutesSeconds(182, 13, 19.992).toString());
+
+                assert.equal(
+                    astronomy.decimalDegreesToDegreesMinutesSeconds(182.5241667).toString(),
+                    new DegreesMinutesSeconds(182, 31, 27).toString());
+            });
+
+            test("Degrees, minutes and seconds to decimal degrees ", function(assert) {
+                assert.equal(
+                    astronomy.degreesMinutesSecondsToDecimalDegrees(new DegreesMinutesSeconds(0, 0, 0)),
+                    0);
+
+                assert.equal(
+                    astronomy.degreesMinutesSecondsToDecimalDegrees(new DegreesMinutesSeconds(182, 13, 19.992)),
+                    182.22222);
+
+                assert.equal(
+                    astronomy.degreesMinutesSecondsToDecimalDegrees(new DegreesMinutesSeconds(182, 31, 27)),
+                    182.52416666666667);
+            });
+
+            module("22 - Converting between angles expressed in degrees and angles expressed in hours")
+
+            test("Hours, minutes and seconds to degrees, minutes and seconds", function(assert) {
+
+                assert.equal(
+                    astronomy.hoursMinutesSecondsToDegreesMinutesSeconds(new TimeOfDay(0, 0, 0)).toString(),
+                    new DegreesMinutesSeconds(0, 0, 0).toString());
+
+                assert.equal(
+                    astronomy.hoursMinutesSecondsToDegreesMinutesSeconds(new TimeOfDay(9, 36, 10.2)).toString(),
+                    new DegreesMinutesSeconds(144, 2, 33).toString());
+
+                assert.equal(
+                    astronomy.hoursMinutesSecondsToDegreesMinutesSeconds(new TimeOfDay(23, 59, 59)).toString(),
+                    new DegreesMinutesSeconds(359, 59, 45).toString());
+            });
+
+            test("Degrees, minutes and seconds to hours, minutes and seconds", function(assert) {
+                assert.equal(
+                    astronomy.degreesMinutesSecondsToHoursMinutesSeconds(new DegreesMinutesSeconds(0, 0, 0)).toString(),
+                    new TimeOfDay(0, 0, 0).toString());
+
+                assert.equal(
+                    astronomy.degreesMinutesSecondsToHoursMinutesSeconds(new DegreesMinutesSeconds(144, 2, 33)).toString(),
+                    new TimeOfDay(9, 36, 10.2).toString());
+
+                assert.equal(
+                    astronomy.degreesMinutesSecondsToHoursMinutesSeconds(new DegreesMinutesSeconds(359, 59, 45)).toString(),
+                    new TimeOfDay(23, 59, 59).toString());
+            });
+
+
+        </script>
+    </body>
+</html>
