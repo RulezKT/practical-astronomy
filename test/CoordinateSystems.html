@@ -50,15 +50,32 @@
             module("22 - Converting between angles expressed in degrees and angles expressed in hours")
 
             test("Hours, minutes and seconds to degrees, minutes and seconds", function(assert) {
+
+                assert.equal(
+                    coordinateSystems.hoursMinutesSecondsToDegreesMinutesSeconds(new TimeOfDay(0, 0, 0)).toString(),
+                    new DegreesMinutesSeconds(0, 0, 0).toString());
+
                 assert.equal(
                     coordinateSystems.hoursMinutesSecondsToDegreesMinutesSeconds(new TimeOfDay(9, 36, 10.2)).toString(),
                     new DegreesMinutesSeconds(144, 2, 33).toString());
+
+                assert.equal(
+                    coordinateSystems.hoursMinutesSecondsToDegreesMinutesSeconds(new TimeOfDay(23, 59, 59)).toString(),
+                    new DegreesMinutesSeconds(359, 59, 45).toString());
             });
 
-            test("Degress minutes and seconds to hours, minutes and seconds", function(assert) {
+            test("Degrees, minutes and seconds to hours, minutes and seconds", function(assert) {
+                assert.equal(
+                    coordinateSystems.degreesMinutesSecondsToHoursMinutesSeconds(new DegreesMinutesSeconds(0, 0, 0)).toString(),
+                    new TimeOfDay(0, 0, 0).toString());
+
                 assert.equal(
                     coordinateSystems.degreesMinutesSecondsToHoursMinutesSeconds(new DegreesMinutesSeconds(144, 2, 33)).toString(),
                     new TimeOfDay(9, 36, 10.2).toString());
+
+                assert.equal(
+                    coordinateSystems.degreesMinutesSecondsToHoursMinutesSeconds(new DegreesMinutesSeconds(359, 59, 45)).toString(),
+                    new TimeOfDay(23, 59, 59).toString());
             });
 
         </script>
