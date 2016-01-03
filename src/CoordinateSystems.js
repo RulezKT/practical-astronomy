@@ -3,6 +3,12 @@
 
 function CoordinateSystems() {}
 
+var time = new Time();
+
+/*
+ * 21 - Converting between decimal degrees and degrees minutes and seconds
+ */
+
 CoordinateSystems.prototype.decimalDegreesToDegreesMinutesSeconds = function(decimalDegrees) {
 
     var totalSeconds = decimalDegrees * 3600;
@@ -25,6 +31,26 @@ CoordinateSystems.prototype.degreesMinutesSecondsToDecimalDegrees = function(deg
     return (((degreesMinutesSeconds.seconds / 60) + degreesMinutesSeconds.minutes) / 60) + degreesMinutesSeconds.degrees;
 }
 
+/*
+ * 22 - Converting between angles expressed in degrees and angles expressed in hours
+ */
+
+CoordinateSystems.prototype.hoursMinutesSecondsToDegreesMinutesSeconds = function(timeOfDay) {
+
+    var decimalHours = time.hoursMinutesSecondsToDecimalHours(timeOfDay);
+    var decimalDegrees = decimalHours * 15;
+
+    return this.decimalDegreesToDegreesMinutesSeconds(decimalDegrees);
+}
+
+CoordinateSystems.prototype.degreesMinutesSecondsToHoursMinutesSeconds = function(degreesMinutesSeconds) {
+
+    var decimalDegrees = this.degreesMinutesSecondsToDecimalDegrees(degreesMinutesSeconds);
+    var decimalHours = decimalDegrees / 15;
+
+    return time.decimalHoursToHoursMinutesSeconds(decimalHours);
+}
+
 function DegreesMinutesSeconds(degrees, minutes, seconds) {
 
     this.degrees = degrees;
@@ -40,7 +66,7 @@ DegreesMinutesSeconds.prototype.toString = function() {
     return this.degrees + "° " + this.minutes + "' " + seconds + "." + milliseconds + "\"";
 }
 
-function zeroPad(number, size) {
+function zeroPad(number, size) { // TODO - move to a common js?
 
     var padded = "" + number;
 

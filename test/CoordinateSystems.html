@@ -11,6 +11,7 @@
         <div id="qunit"></div>
         <div id="qunit-fixture"></div>
         <script src="./qunit-1.19.0.js"></script>
+        <script src="../src/Time.js"></script>
         <script src="../src/CoordinateSystems.js"></script>
         <script>
 
@@ -44,6 +45,20 @@
                 assert.equal(
                     coordinateSystems.degreesMinutesSecondsToDecimalDegrees(new DegreesMinutesSeconds(182, 31, 27)),
                     182.52416666666667);
+            });
+
+            module("22 - Converting between angles expressed in degrees and angles expressed in hours")
+
+            test("Hours, minutes and seconds to degrees, minutes and seconds", function(assert) {
+                assert.equal(
+                    coordinateSystems.hoursMinutesSecondsToDegreesMinutesSeconds(new TimeOfDay(9, 36, 10.2)).toString(),
+                    new DegreesMinutesSeconds(144, 2, 33).toString());
+            });
+
+            test("Degress minutes and seconds to hours, minutes and seconds", function(assert) {
+                assert.equal(
+                    coordinateSystems.degreesMinutesSecondsToHoursMinutesSeconds(new DegreesMinutesSeconds(144, 2, 33)).toString(),
+                    new TimeOfDay(9, 36, 10.2).toString());
             });
 
         </script>
