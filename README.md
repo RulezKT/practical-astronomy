@@ -41,8 +41,8 @@ Implementations of calculations from '[Practical Astronomy with your Calculator 
 | 20  | Galactic coordinates                                                         | N/A                                                                                    |
 | 21  | Converting between decimal degress and degrees, minutes and seconds          | decimalDegreesToDegreesMinutesSeconds, degreesMinutesSecondsToDecimalDegrees           |
 | 22  | Converting between angles expressed in degrees and angles expressed in hours | hoursMinutesSecondsToDegreesMinutesSeconds, degreesMinutesSecondsToHoursMinutesSeconds |
-| 23  | Converting between one coordinate system and another                         |                                                                                        |
-| 24  | Converting between right ascension and hour-angle                            |                                                                                        |
+| 23  | Converting between one coordinate system and another                         | N/A                                                                                    |
+| 24  | Converting between right ascension and hour angle                            | rightAscensionToHourAngle, hourAngleToRightAscension                                   |
 | 25  | Equatorial to horizon coordinate conversion                                  |                                                                                        |
 | 26  | Horizon to equatorial coordinate conversion                                  |                                                                                        |
 | 27  | Ecliptic to equatorial coordinate conversion                                 |                                                                                        |

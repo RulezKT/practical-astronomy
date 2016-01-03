@@ -11,7 +11,7 @@ AstronomyError.prototype = Error.prototype;
 function Astronomy() {}
 
 /*
- * 1 - Calendars
+ * 01 - Calendars
  */
 
 Astronomy.prototype.daysInMonth = function(year, month) {
@@ -35,7 +35,7 @@ Astronomy.prototype.daysInMonth = function(year, month) {
 }
 
 /*
- * 2 - The date of Easter
+ * 02 - The date of Easter
  */
 
 Astronomy.prototype.dateOfEaster = function(year) {
@@ -62,7 +62,7 @@ Astronomy.prototype.dateOfEaster = function(year) {
 };
 
 /*
- * 3 - Converting the date to the day number
+ * 03 - Converting the date to the day number
  */
 
 Astronomy.prototype.dateToDayNumber = function(calendarDate) {
@@ -100,7 +100,7 @@ Astronomy.prototype.dateToDaysElapsedSinceEpoch = function(calendarDate) {
 }
 
 /*
- * 4 - Julian dates
+ * 04 - Julian dates
  */
 
 Astronomy.prototype.dateToJulianDayNumber = function(calendarDate) {
@@ -139,7 +139,7 @@ Astronomy.prototype.dateToModifiedJulianDayNumber = function(calendarDate) {
 }
 
 /*
- * 5 - Converting the Julian date to the Greenwich calendar date
+ * 05 - Converting the Julian date to the Greenwich calendar date
  */
 
 Astronomy.prototype.julianDayNumberToDate = function(julianDayNumber) {
@@ -182,7 +182,7 @@ Astronomy.prototype.julianDayNumberToDate = function(julianDayNumber) {
 }
 
 /*
- * 6 - Finding the name of the day of the week
+ * 06 - Finding the name of the day of the week
  */
 
 Astronomy.prototype.dateToDayOfWeek = function(calendarDate) {
@@ -203,7 +203,7 @@ Astronomy.prototype.julianDayNumberToDayOfWeek = function(julianDayNumber) {
 }
 
 /*
- * 7 - Converting hours, minutes and seconds to decimal hours
+ * 07 - Converting hours, minutes and seconds to decimal hours
  */
 
 Astronomy.prototype.hoursMinutesSecondsToDecimalHours = function(timeOfDay) {
@@ -212,7 +212,7 @@ Astronomy.prototype.hoursMinutesSecondsToDecimalHours = function(timeOfDay) {
 }
 
 /*
- * 8 - Converting decimal hours to hours, minutes and seconds
+ * 08 - Converting decimal hours to hours, minutes and seconds
  */
 
 Astronomy.prototype.decimalHoursToHoursMinutesSeconds = function(decimalHours) {
@@ -233,7 +233,7 @@ Astronomy.prototype.decimalHoursToHoursMinutesSeconds = function(decimalHours) {
 }
 
 /*
- * 9 - Converting the local time to Universal Time (UT)
+ * 09 - Converting the local time to Universal Time (UT)
  */
 
 Astronomy.prototype.localTimeToUniversalTime = function(dateAndTime, zoneCorrection, daylightSaving) {
@@ -395,6 +395,48 @@ Astronomy.prototype.degreesMinutesSecondsToHoursMinutesSeconds = function(degree
     var decimalHours = decimalDegrees / 15;
 
     return this.decimalHoursToHoursMinutesSeconds(decimalHours);
+}
+
+/*
+ * 24 - Converting between right ascension and hour angle
+ */
+
+Astronomy.prototype.rightAscensionToHourAngle = function(rightAscension, dateAndTime, zoneCorrection, daylightSaving, longitude) {
+
+    var ut = this.localTimeToUniversalTime(dateAndTime, zoneCorrection, daylightSaving);
+    var gst = this.universalTimeToGreenwichSiderealTime(ut);
+    var lst = this.greenwichSiderealTimeToLocalSiderealTime(gst, longitude);
+
+    var lstDecimalHours = this.hoursMinutesSecondsToDecimalHours(lst);
+
+    var rightAscensionDecimalHours = this.hoursMinutesSecondsToDecimalHours(rightAscension);
+
+    var hourAngleDecimalHours = lstDecimalHours - rightAscensionDecimalHours;
+
+    if (hourAngleDecimalHours < 0) {
+        hourAngleDecimalHours += 24;
+    }
+
+    return this.decimalHoursToHoursMinutesSeconds(hourAngleDecimalHours);
+}
+
+Astronomy.prototype.hourAngleToRightAscension = function(hourAngle, dateAndTime, zoneCorrection, daylightSaving, longitude) {
+
+    var ut = this.localTimeToUniversalTime(dateAndTime, zoneCorrection, daylightSaving);
+    var gst = this.universalTimeToGreenwichSiderealTime(ut);
+    var lst = this.greenwichSiderealTimeToLocalSiderealTime(gst, longitude);
+
+    var lstDecimalHours = this.hoursMinutesSecondsToDecimalHours(lst);
+
+    var hourAngleDecimalHours = this.hoursMinutesSecondsToDecimalHours(hourAngle);
+
+    var rightAscensionDecimalHours = lstDecimalHours - hourAngleDecimalHours;
+
+    if (rightAscensionDecimalHours < 0) {
+        rightAscensionDecimalHours += 24;
+    }
+
+    return this.decimalHoursToHoursMinutesSeconds(rightAscensionDecimalHours);
 }
 
 function DegreesMinutesSeconds(degrees, minutes, seconds) {
