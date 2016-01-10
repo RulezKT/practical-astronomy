@@ -441,8 +441,23 @@
                         -64).toString(),
                     new TimeOfDay(9, 52, 23.655).toString());
 
-                    // TODO - test hour ascension not less than zero
-                    // TODO - test daylight savings, etc
+                assert.equal( // Daylight Savings Time, Positive Zone Correction
+                    astronomy.rightAscensionToHourAngle(
+                        new TimeOfDay(18, 32, 21),
+                        new DateAndTime(new CalendarDate(1980, 4, 22), new TimeOfDay(14, 36, 51.67)),
+                        4,
+                        1,
+                        -64).toString(),
+                    new TimeOfDay(0, 50, 54.947).toString());
+
+                assert.equal( // Positive Longitude
+                    astronomy.rightAscensionToHourAngle(
+                        new TimeOfDay(18, 32, 21),
+                        new DateAndTime(new CalendarDate(1980, 4, 22), new TimeOfDay(14, 36, 51.67)),
+                        -4,
+                        0,
+                        164).toString(),
+                    new TimeOfDay(1, 4, 23.655).toString());
             });
 
             test("Hour angle to right ascension", function(assert) {
@@ -455,6 +470,24 @@
                         0,
                         -64).toString(),
                     new TimeOfDay(18, 32, 21).toString());
+
+                assert.equal( // Daylight Savings Time, Positive Zone Correction
+                    astronomy.hourAngleToRightAscension(
+                        new TimeOfDay(9, 52, 23.655),
+                        new DateAndTime(new CalendarDate(1980, 4, 22), new TimeOfDay(14, 36, 51.67)),
+                        4,
+                        1,
+                        -64).toString(),
+                    new TimeOfDay(9, 30, 52.292).toString());
+
+                assert.equal( // Positive Longitude
+                    astronomy.hourAngleToRightAscension(
+                        new TimeOfDay(9, 52, 23.655),
+                        new DateAndTime(new CalendarDate(1980, 4, 22), new TimeOfDay(14, 36, 51.67)),
+                        -4,
+                        0,
+                        164).toString(),
+                    new TimeOfDay(9, 44, 21).toString());
             });
 
         </script>
