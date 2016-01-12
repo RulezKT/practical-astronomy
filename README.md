@@ -43,7 +43,7 @@ Implementations of calculations from '[Practical Astronomy with your Calculator 
 | 22  | Converting between angles expressed in degrees and angles expressed in hours | hoursMinutesSecondsToDegreesMinutesSeconds, degreesMinutesSecondsToHoursMinutesSeconds |
 | 23  | Converting between one coordinate system and another                         | N/A                                                                                    |
 | 24  | Converting between right ascension and hour angle                            | rightAscensionToHourAngle, hourAngleToRightAscension                                   |
-| 25  | Equatorial to horizon coordinate conversion                                  |                                                                                        |
+| 25  | Equatorial to horizon coordinate conversion                                  | equatorialCoordinatesToHorizonCoordinates                                              |
 | 26  | Horizon to equatorial coordinate conversion                                  |                                                                                        |
 | 27  | Ecliptic to equatorial coordinate conversion                                 |                                                                                        |
 | 28  | Equatorial to ecliptic coordinate conversion                                 |                                                                                        |

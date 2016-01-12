@@ -439,19 +439,39 @@ Astronomy.prototype.hourAngleToRightAscension = function(hourAngle, dateAndTime,
     return this.decimalHoursToHoursMinutesSeconds(rightAscensionDecimalHours);
 }
 
-function DegreesMinutesSeconds(degrees, minutes, seconds) {
+/*
+ * 25 - Equatorial to horizon coordinate conversion
+ */
 
-    this.degrees = degrees;
-    this.minutes = minutes;
-    this.seconds = seconds;
-}
+Astronomy.prototype.equatorialCoordinatesToHorizonCoordinates = function(equatorialCoordinates, latitude) {
 
-DegreesMinutesSeconds.prototype.toString = function() {
+    var hourAngleDecimalHours = this.hoursMinutesSecondsToDecimalHours(equatorialCoordinates.hourAngle);
+    var hourAngleDegrees = hourAngleDecimalHours * 15;
+    var hourAngleRadians = degreesToRadians(hourAngleDegrees);
 
-    var seconds = Math.floor(this.seconds);
-    var milliseconds = zeroPad(Math.round((this.seconds % 1) * 1000), 3);
+    var declinationDecimalDegrees = this.degreesMinutesSecondsToDecimalDegrees(equatorialCoordinates.declination);
+    var declinationRadians = degreesToRadians(declinationDecimalDegrees);
 
-    return this.degrees + "° " + this.minutes + "' " + seconds + "." + milliseconds + "\"";
+    var latitudeRadians = degreesToRadians(latitude);
+
+    var sinARadians =
+        Math.sin(declinationRadians) * Math.sin(latitudeRadians) +
+        Math.cos(declinationRadians) * Math.cos(latitudeRadians) * Math.cos(hourAngleRadians);
+
+    var altitudeRadians = Math.asin(sinARadians);
+    var altitudeDegrees = radiansToDegrees(altitudeRadians);
+
+    var y = -Math.cos(declinationRadians) * Math.cos(latitudeRadians) * Math.sin(hourAngleRadians)
+    var x = Math.sin(declinationRadians) - Math.sin(latitudeRadians) * sinARadians;
+    var A = Math.atan2(y, x);
+    var B = radiansToDegrees(A);
+
+    azimuthDegrees = B - (360 * Math.floor(B / 360));
+
+    return new HorizonCoordinates(
+        new this.decimalDegreesToDegreesMinutesSeconds(azimuthDegrees),
+        new this.decimalDegreesToDegreesMinutesSeconds(altitudeDegrees)
+    );
 }
 
 function CalendarDate(year, month, day) {
@@ -492,6 +512,42 @@ function DateAndTime(calendarDate, timeOfDay) {
 DateAndTime.prototype.toString = function() {
 
     return this.calendarDate + " " + this.timeOfDay;
+}
+
+function DegreesMinutesSeconds(degrees, minutes, seconds) {
+
+    this.degrees = degrees;
+    this.minutes = minutes;
+    this.seconds = seconds;
+}
+
+DegreesMinutesSeconds.prototype.toString = function() {
+
+    var seconds = Math.floor(this.seconds);
+    var milliseconds = zeroPad(Math.round((this.seconds % 1) * 1000), 3);
+
+    return this.degrees + "° " + this.minutes + "' " + seconds + "." + milliseconds + "\"";
+}
+
+function EquatorialCoordinates(hourAngle, declination) {
+
+    this.hourAngle = hourAngle;
+    this.declination = declination;
+}
+
+EquatorialCoordinates.prototype.toString = function() {
+
+    return "H=" + this.hourAngle + ", δ=" + this.declination;
+}
+
+function HorizonCoordinates(azimuth, altitude) {
+    this.azimuth = azimuth;
+    this.altitude = altitude;
+}
+
+HorizonCoordinates.prototype.toString = function() {
+
+    return "A=" + this.azimuth + ", a=" + this.altitude;
 }
 
 function checkYearInGregorianCalendar(year) {
@@ -547,4 +603,14 @@ function zeroPad(number, size) {
     }
 
     return padded;
+}
+
+function degreesToRadians(degrees) {
+
+    return degrees * (Math.PI / 180);
+}
+
+function radiansToDegrees(radians) {
+
+    return radians / (Math.PI / 180);
 }
