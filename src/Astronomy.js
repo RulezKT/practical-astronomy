@@ -454,24 +454,58 @@ Astronomy.prototype.equatorialCoordinatesToHorizonCoordinates = function(equator
 
     var latitudeRadians = degreesToRadians(latitude);
 
-    var sinARadians =
+    var sinAltitude =
         Math.sin(declinationRadians) * Math.sin(latitudeRadians) +
         Math.cos(declinationRadians) * Math.cos(latitudeRadians) * Math.cos(hourAngleRadians);
 
-    var altitudeRadians = Math.asin(sinARadians);
+    var altitudeRadians = Math.asin(sinAltitude);
     var altitudeDegrees = radiansToDegrees(altitudeRadians);
 
     var y = -Math.cos(declinationRadians) * Math.cos(latitudeRadians) * Math.sin(hourAngleRadians)
-    var x = Math.sin(declinationRadians) - Math.sin(latitudeRadians) * sinARadians;
+    var x = Math.sin(declinationRadians) - Math.sin(latitudeRadians) * sinAltitude;
     var A = Math.atan2(y, x);
     var B = radiansToDegrees(A);
 
-    azimuthDegrees = B - (360 * Math.floor(B / 360));
+    var azimuthDegrees = B - (360 * Math.floor(B / 360));
 
     return new HorizonCoordinates(
-        new this.decimalDegreesToDegreesMinutesSeconds(azimuthDegrees),
-        new this.decimalDegreesToDegreesMinutesSeconds(altitudeDegrees)
+        this.decimalDegreesToDegreesMinutesSeconds(azimuthDegrees),
+        this.decimalDegreesToDegreesMinutesSeconds(altitudeDegrees)
     );
+}
+
+/*
+ * 26 - Horizon to equatorial coordinate conversion
+ */
+
+Astronomy.prototype.horizonCoordinatesToEquatorialCoordinates = function(horizonCoordinates, latitude) {
+
+    var azimuthDegrees = this.degreesMinutesSecondsToDecimalDegrees(horizonCoordinates.azimuth);
+    var azimuthRadians = degreesToRadians(azimuthDegrees);
+
+    var altitudeDegrees = this.degreesMinutesSecondsToDecimalDegrees(horizonCoordinates.altitude);
+    var altitudeRadians = degreesToRadians(altitudeDegrees);
+
+    var latitudeRadians = degreesToRadians(latitude);
+
+    var sinDeclination =
+        Math.sin(altitudeRadians) * Math.sin(latitudeRadians) +
+        Math.cos(altitudeRadians) * Math.cos(latitudeRadians) * Math.cos(azimuthRadians);
+
+    var declinationRadians = Math.asin(sinDeclination);
+    var declinationDegrees = radiansToDegrees(declinationRadians);
+
+    var y = -Math.cos(altitudeRadians) * Math.cos(latitudeRadians) * Math.sin(azimuthRadians);
+    var x = Math.sin(altitudeRadians) - Math.sin(latitudeRadians) * sinDeclination;
+    var A = Math.atan2(y, x);
+    var B = radiansToDegrees(A);
+
+    var hourAngleDegrees = B - (360 * Math.floor(B / 360));
+    var hourAngleDecimalHours = hourAngleDegrees / 15;
+
+    return new EquatorialCoordinates(
+        this.decimalHoursToHoursMinutesSeconds(hourAngleDecimalHours),
+        this.decimalDegreesToDegreesMinutesSeconds(declinationDegrees));
 }
 
 function CalendarDate(year, month, day) {

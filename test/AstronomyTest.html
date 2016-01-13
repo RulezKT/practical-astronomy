@@ -490,7 +490,7 @@
                     new TimeOfDay(9, 44, 21).toString());
             });
 
-            module("24 - Equatorial to horizon coordinate conversion")
+            module("25 - Equatorial to horizon coordinate conversion")
 
             test("Equatorial coordinates to horizon coordinates", function(assert) {
 
@@ -504,6 +504,24 @@
                     new HorizonCoordinates(
                         new DegreesMinutesSeconds(283, 16, 15.698), // azimuth
                         new DegreesMinutesSeconds(19, 20, 3.643) // altitude
+                    ).toString()
+                );
+            });
+
+            module("26 - Horizon to equatorial coordinate conversion")
+
+            test("Horizon coordinates to equatorial coordinates", function(assert) {
+
+                assert.equal(
+                    astronomy.horizonCoordinatesToEquatorialCoordinates(
+                        new HorizonCoordinates(
+                            new DegreesMinutesSeconds(283, 16, 15.698), // azimuth
+                            new DegreesMinutesSeconds(19, 20, 3.643)), // altitude
+                        52 // latitude
+                    ).toString(),
+                    new EquatorialCoordinates(
+                        new TimeOfDay(5, 51, 44), // hour angle
+                        new DegreesMinutesSeconds(23, 13, 10) // declination
                     ).toString()
                 );
             });
