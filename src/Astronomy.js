@@ -443,13 +443,13 @@ Astronomy.prototype.hourAngleToRightAscension = function(hourAngle, dateAndTime,
  * 25 - Equatorial to horizon coordinate conversion
  */
 
-Astronomy.prototype.equatorialCoordinatesToHorizonCoordinates = function(equatorialCoordinates, latitude) {
+Astronomy.prototype.equatorialCoordinatesToHorizonCoordinates = function(haEquatorialCoordinates, latitude) {
 
-    var hourAngleDecimalHours = this.hoursMinutesSecondsToDecimalHours(equatorialCoordinates.hourAngle);
+    var hourAngleDecimalHours = this.hoursMinutesSecondsToDecimalHours(haEquatorialCoordinates.hourAngle);
     var hourAngleDegrees = hourAngleDecimalHours * 15;
     var hourAngleRadians = degreesToRadians(hourAngleDegrees);
 
-    var declinationDecimalDegrees = this.degreesMinutesSecondsToDecimalDegrees(equatorialCoordinates.declination);
+    var declinationDecimalDegrees = this.degreesMinutesSecondsToDecimalDegrees(haEquatorialCoordinates.declination);
     var declinationRadians = degreesToRadians(declinationDecimalDegrees);
 
     var latitudeRadians = degreesToRadians(latitude);
@@ -463,6 +463,7 @@ Astronomy.prototype.equatorialCoordinatesToHorizonCoordinates = function(equator
 
     var y = -Math.cos(declinationRadians) * Math.cos(latitudeRadians) * Math.sin(hourAngleRadians)
     var x = Math.sin(declinationRadians) - Math.sin(latitudeRadians) * sinAltitude;
+
     var A = Math.atan2(y, x);
     var B = radiansToDegrees(A);
 
@@ -497,14 +498,68 @@ Astronomy.prototype.horizonCoordinatesToEquatorialCoordinates = function(horizon
 
     var y = -Math.cos(altitudeRadians) * Math.cos(latitudeRadians) * Math.sin(azimuthRadians);
     var x = Math.sin(altitudeRadians) - Math.sin(latitudeRadians) * sinDeclination;
+
     var A = Math.atan2(y, x);
     var B = radiansToDegrees(A);
 
     var hourAngleDegrees = B - (360 * Math.floor(B / 360));
     var hourAngleDecimalHours = hourAngleDegrees / 15;
 
-    return new EquatorialCoordinates(
+    return new HaEquatorialCoordinates(
         this.decimalHoursToHoursMinutesSeconds(hourAngleDecimalHours),
+        this.decimalDegreesToDegreesMinutesSeconds(declinationDegrees));
+}
+
+/*
+ * 27 - Ecliptic to equatorial coordinate conversion
+ */
+
+// TODO - factor in nutation
+Astronomy.prototype.meanObliquityOfTheEcliptic = function(calendarDate) {
+
+    var dateJD = this.dateToJulianDayNumber(calendarDate);
+    var epochJD = this.dateToJulianDayNumber(new CalendarDate(2000, 1, 1.5));
+    var mJD = dateJD - epochJD;
+
+    var T = mJD / 36525;
+
+    var deArcSecs = T * (46.815 + T * (0.0006 - (T * 0.00181)));
+    var deDegrees = deArcSecs / 3600;
+
+    var obliquity = 23.439292 - deDegrees;
+
+    return obliquity;
+}
+
+Astronomy.prototype.eclipticCoordinatesToEquatorialCoordinates = function(eclipticCoordinates, calendarDate) {
+
+    var eclipticLongitudeDegrees = this.degreesMinutesSecondsToDecimalDegrees(eclipticCoordinates.eclipticLongitude);
+    var eclipticLongitudeRadians = degreesToRadians(eclipticLongitudeDegrees);
+
+    var eclipticLatitudeDegrees = this.degreesMinutesSecondsToDecimalDegrees(eclipticCoordinates.eclipticLatitude);
+    var eclipticLatitudeRadians = degreesToRadians(eclipticLatitudeDegrees);
+
+    var obliquityDegrees = this.meanObliquityOfTheEcliptic(calendarDate); // TODO - factor in nutation
+    var obliquityRadians = degreesToRadians(obliquityDegrees);
+
+    var sinDeclination =
+        Math.sin(eclipticLatitudeRadians) * Math.cos(obliquityRadians) +
+        Math.cos(eclipticLatitudeRadians) * Math.sin(obliquityRadians) * Math.sin(eclipticLongitudeRadians);
+
+    var declinationRadians = Math.asin(sinDeclination);
+    var declinationDegrees = radiansToDegrees(declinationRadians);
+
+    var y = Math.sin(eclipticLongitudeRadians) * Math.cos(obliquityRadians) - Math.tan(eclipticLatitudeRadians) * Math.sin(obliquityRadians);
+    var x = Math.cos(eclipticLongitudeRadians);
+
+    var A = Math.atan2(y, x);
+    var B = radiansToDegrees(A);
+
+    var rightAscensionDegrees = B - (360 * Math.floor(B / 360));
+    var rightAscensionDecimalHours = rightAscensionDegrees / 15;
+
+    return new RaEquatorialCoordinates(
+        this.decimalHoursToHoursMinutesSeconds(rightAscensionDecimalHours),
         this.decimalDegreesToDegreesMinutesSeconds(declinationDegrees));
 }
 
@@ -563,18 +618,30 @@ DegreesMinutesSeconds.prototype.toString = function() {
     return this.degrees + "° " + this.minutes + "' " + seconds + "." + milliseconds + "\"";
 }
 
-function EquatorialCoordinates(hourAngle, declination) {
+function HaEquatorialCoordinates(hourAngle, declination) {
 
     this.hourAngle = hourAngle;
     this.declination = declination;
 }
 
-EquatorialCoordinates.prototype.toString = function() {
+HaEquatorialCoordinates.prototype.toString = function() {
 
     return "H=" + this.hourAngle + ", δ=" + this.declination;
 }
 
+function RaEquatorialCoordinates(rightAscension, declination) {
+
+    this.rightAscension = rightAscension;
+    this.declination = declination;
+}
+
+RaEquatorialCoordinates.prototype.toString = function() {
+
+    return "α=" + this.rightAscension + ", δ=" + this.declination;
+}
+
 function HorizonCoordinates(azimuth, altitude) {
+
     this.azimuth = azimuth;
     this.altitude = altitude;
 }
@@ -582,6 +649,17 @@ function HorizonCoordinates(azimuth, altitude) {
 HorizonCoordinates.prototype.toString = function() {
 
     return "A=" + this.azimuth + ", a=" + this.altitude;
+}
+
+function EclipticCoordinates(eclipticLongitude, eclipticLatitude) {
+
+    this.eclipticLongitude = eclipticLongitude;
+    this.eclipticLatitude = eclipticLatitude;
+}
+
+EclipticCoordinates.prototype.toString = function() {
+
+    return "λ=" + this.eclipticLongitude + ", β=" + this.eclipticLatitude;
 }
 
 function checkYearInGregorianCalendar(year) {

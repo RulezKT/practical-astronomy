@@ -45,7 +45,7 @@ Implementations of calculations from '[Practical Astronomy with your Calculator 
 | 24  | Converting between right ascension and hour angle                            | rightAscensionToHourAngle, hourAngleToRightAscension                                   |
 | 25  | Equatorial to horizon coordinate conversion                                  | equatorialCoordinatesToHorizonCoordinates                                              |
 | 26  | Horizon to equatorial coordinate conversion                                  | horizonCoordinatesToEquatorialCoordinates                                              |
-| 27  | Ecliptic to equatorial coordinate conversion                                 |                                                                                        |
+| 27  | Ecliptic to equatorial coordinate conversion                                 | meanObliquityOfTheEcliptic, eclipticCoordinatesToEquatorialCoordinates                 |
 | 28  | Equatorial to ecliptic coordinate conversion                                 |                                                                                        |
 | 29  | Equatorial to galactic coordinate conversion                                 |                                                                                        |
 | 30  | Galactic to equatorial coordinate conversion                                 |                                                                                        |

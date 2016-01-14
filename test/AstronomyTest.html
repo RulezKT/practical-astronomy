@@ -496,9 +496,10 @@
 
                 assert.equal(
                     astronomy.equatorialCoordinatesToHorizonCoordinates(
-                        new EquatorialCoordinates(
+                        new HaEquatorialCoordinates(
                             new TimeOfDay(5, 51, 44), // hour angle
-                            new DegreesMinutesSeconds(23, 13, 10)), // declination
+                            new DegreesMinutesSeconds(23, 13, 10) // declination
+                        ),
                         52 // latitude
                     ).toString(),
                     new HorizonCoordinates(
@@ -516,12 +517,43 @@
                     astronomy.horizonCoordinatesToEquatorialCoordinates(
                         new HorizonCoordinates(
                             new DegreesMinutesSeconds(283, 16, 15.698), // azimuth
-                            new DegreesMinutesSeconds(19, 20, 3.643)), // altitude
+                            new DegreesMinutesSeconds(19, 20, 3.643) // altitude
+                        ),
                         52 // latitude
                     ).toString(),
-                    new EquatorialCoordinates(
+                    new HaEquatorialCoordinates(
                         new TimeOfDay(5, 51, 44), // hour angle
                         new DegreesMinutesSeconds(23, 13, 10) // declination
+                    ).toString()
+                );
+            });
+
+            module("27 - Ecliptic to equatorial coordinate conversion")
+
+            test("Mean obliquity of the ecliptic", function(assert) {
+
+                assert.equal(astronomy.meanObliquityOfTheEcliptic(new CalendarDate(2009, 7, 6)), 23.438055312466062);
+                assert.equal(astronomy.meanObliquityOfTheEcliptic(new CalendarDate(2016, 1, 14)), 23.43720688068752);
+            });
+
+            test("Ecliptic coordinates to equatorial coordinates", function(assert) {
+
+                assert.equal(
+                    astronomy.eclipticCoordinatesToEquatorialCoordinates(
+                        new EclipticCoordinates(
+                            new DegreesMinutesSeconds(139, 41, 10), // ecliptic longitude
+                            new DegreesMinutesSeconds(4, 52, 31) // ecliptic latitude
+                        ),
+                        new CalendarDate(2009, 7, 6)
+                    ).toString(),
+                    // TODO - after we factor in nutation
+                    // new RaEquatorialCoordinates(
+//                         new TimeOfDay(9, 34, 53.4), // right ascension
+//                         new DegreesMinutesSeconds(19, 32, 8.52) // declination
+//                     ).toString()
+                    new RaEquatorialCoordinates(
+                        new TimeOfDay(9, 34, 53.321), // right ascension
+                        new DegreesMinutesSeconds(19, 32, 6.011) // declination
                     ).toString()
                 );
             });
