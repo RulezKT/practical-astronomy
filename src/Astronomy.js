@@ -573,22 +573,56 @@ Astronomy.prototype.nutation = function(calendarDate) {
     var epochJD = this.dateToJulianDayNumber(new CalendarDate(1900, 1, 0.5));
 
     var tCenturies = (dateJD - epochJD) / 36525;
+    var tCenturiesSq = tCenturies * tCenturies;
 
-    var aDegrees = 100.0021358 * tCenturies;
+    var A = 100.0021358 * tCenturies;
+    var B = 360 * (A - Math.floor(A));
+    var lDegrees = 279.6967 + (0.000303 * tCenturiesSq) + B;
+    var lRadians2 = 2 * degreesToRadians(lDegrees);
 
-    var l1Degrees = 279.6967 + (0.000303 * tCenturies * tCenturies);
+    var C = 1336.855231 * tCenturies;
+    var D = 360 * (C - Math.floor(C));
+    var dDegrees = 270.4342 - (0.001133 * tCenturiesSq) + D;
+    var dRadians2 = 2 * degreesToRadians(dDegrees);
 
-    var lDegrees = reduceValueToZeroToRange(l1Degrees + (360 * (aDegrees - Math.floor(aDegrees))), 360);
-    var lRadians = degreesToRadians(lDegrees);
+    var E = 99.99736056 * tCenturies;
+    var F = 360 * (E - Math.floor(E));
+    var m1Degrees = 358.4758 - (0.00015 * tCenturiesSq) + F;
+    var m1Radians = degreesToRadians(m1Degrees);
 
-    var bDegrees = 5.372617 * tCenturies;
+    var G = 1325.552359 * tCenturies;
+    var H = 360 * (G - Math.floor(G));
+    var m2Degrees = 296.1046 + (0.009192 * tCenturiesSq) + H;
+    var m2Radians = degreesToRadians(m2Degrees);
 
-    var nDegrees = reduceValueToZeroToRange(259.1833 - (360 * (bDegrees - Math.floor(bDegrees))), 360);
+    var I = 5.372616667 * tCenturies;
+    var J = 360 * (I - Math.floor(I));
+    var nDegrees = 259.1833 + 0.002078 * tCenturiesSq - J;
     var nRadians = degreesToRadians(nDegrees);
 
-    var nutationInLongitudeArcSecs = (-17.2 * Math.sin(nRadians)) - (1.3 * Math.sin(2 * lRadians));
+    var nutationInLongitudeArcSecs = (-17.2327 - 0.01737 * tCenturies) * Math.sin(nRadians);
+    nutationInLongitudeArcSecs += (-1.2729 - 0.00013 * tCenturies) * Math.sin(lRadians2);
+    nutationInLongitudeArcSecs += 0.2088 * Math.sin(2 * nRadians);
+    nutationInLongitudeArcSecs -= 0.2037 * Math.sin(dRadians2);
+    nutationInLongitudeArcSecs += (0.1261 - 0.00031 * tCenturies) * Math.sin(m1Radians);
+    nutationInLongitudeArcSecs += 0.0675 * Math.sin(m2Radians)
+    nutationInLongitudeArcSecs -= (0.0497 - 0.00012 * tCenturies) * Math.sin(lRadians2 + m1Radians);
+    nutationInLongitudeArcSecs -= 0.0342 * Math.sin(dRadians2 - nRadians);
+    nutationInLongitudeArcSecs -= 0.0261 * Math.sin(dRadians2 + m2Radians);
+    nutationInLongitudeArcSecs += 0.0214 * Math.sin(lRadians2 - m1Radians);
+    nutationInLongitudeArcSecs -= 0.0149 * Math.sin(lRadians2 - dRadians2 + m2Radians);
+    nutationInLongitudeArcSecs += 0.0124 * Math.sin(lRadians2 - nRadians)
+    nutationInLongitudeArcSecs += 0.0114 * Math.sin(dRadians2 - m2Radians);
 
-    var nutationInObliquityArcSecs = (9.2 * Math.cos(nRadians)) + (0.5 * Math.cos(2 * lRadians));
+    var nutationInObliquityArcSecs = (9.21 + (0.00091 * tCenturies)) * Math.cos(nRadians);
+    nutationInObliquityArcSecs += (0.5522 - (0.00029 * tCenturies)) * Math.cos(lRadians2);
+    nutationInObliquityArcSecs -= 0.0904 * Math.cos(nRadians * 2);
+    nutationInObliquityArcSecs += 0.0884 * Math.cos(dRadians2);
+    nutationInObliquityArcSecs += 0.0216 * Math.cos(lRadians2 + m1Radians);
+    nutationInObliquityArcSecs += 0.0183 * Math.cos(dRadians2 - nRadians);
+    nutationInObliquityArcSecs += 0.0113 * Math.cos(dRadians2 + m2Radians);
+    nutationInObliquityArcSecs -= 0.0093 * Math.cos(lRadians2 - m1Radians);
+    nutationInObliquityArcSecs -= 0.0066 * Math.cos(lRadians2 - nRadians);
 
     var nutationInLongitudeDegrees = nutationInLongitudeArcSecs / 3600;
     var nutationInObliquityDegrees = nutationInObliquityArcSecs / 3600;
