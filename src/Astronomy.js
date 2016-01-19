@@ -563,6 +563,39 @@ Astronomy.prototype.eclipticCoordinatesToEquatorialCoordinates = function(eclipt
         this.decimalDegreesToDegreesMinutesSeconds(declinationDegrees));
 }
 
+/*
+ * 35 - Nutation
+ */
+
+Astronomy.prototype.nutation = function(calendarDate) {
+
+    var dateJD = this.dateToJulianDayNumber(calendarDate);
+    var epochJD = this.dateToJulianDayNumber(new CalendarDate(1900, 1, 0.5));
+
+    var tCenturies = (dateJD - epochJD) / 36525;
+
+    var aDegrees = 100.0021358 * tCenturies;
+
+    var l1Degrees = 279.6967 + (0.000303 * tCenturies * tCenturies);
+
+    var lDegrees = reduceValueToZeroToRange(l1Degrees + (360 * (aDegrees - Math.floor(aDegrees))), 360);
+    var lRadians = degreesToRadians(lDegrees);
+
+    var bDegrees = 5.372617 * tCenturies;
+
+    var nDegrees = reduceValueToZeroToRange(259.1833 - (360 * (bDegrees - Math.floor(bDegrees))), 360);
+    var nRadians = degreesToRadians(nDegrees);
+
+    var nutationInLongitudeArcSecs = (-17.2 * Math.sin(nRadians)) - (1.3 * Math.sin(2 * lRadians));
+
+    var nutationInObliquityArcSecs = (9.2 * Math.cos(nRadians)) + (0.5 * Math.cos(2 * lRadians));
+
+    var nutationInLongitudeDegrees = nutationInLongitudeArcSecs / 3600;
+    var nutationInObliquityDegrees = nutationInObliquityArcSecs / 3600;
+
+    return new Nutation(nutationInLongitudeDegrees, nutationInObliquityDegrees);
+}
+
 function CalendarDate(year, month, day) {
 
     this.year = year;
@@ -660,6 +693,17 @@ function EclipticCoordinates(eclipticLongitude, eclipticLatitude) {
 EclipticCoordinates.prototype.toString = function() {
 
     return "λ=" + this.eclipticLongitude + ", β=" + this.eclipticLatitude;
+}
+
+function Nutation(nutationInLongitude, nutationInObliquity) {
+
+    this.nutationInLongitude = nutationInLongitude;
+    this.nutationInObliquity = nutationInObliquity;
+}
+
+Nutation.prototype.toString = function() {
+
+    return "Δψ=" + this.nutationInLongitude + ", Δε=" + this.nutationInObliquity;
 }
 
 function checkYearInGregorianCalendar(year) {

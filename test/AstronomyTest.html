@@ -558,6 +558,19 @@
                 );
             });
 
+            module("35 - Nutation")
+
+            test("Nutation", function(assert) {
+
+                assert.equal(
+                    astronomy.nutation(new CalendarDate(1988, 9, 1)).toString(),
+                    new Nutation(
+                        0.0015258083552917808, // nutation in longitude
+                        0.0025671004471993584 // nutation in obliquity
+                    ).toString()
+                );
+            });
+
         </script>
     </body>
 </html>

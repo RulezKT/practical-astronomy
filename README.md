@@ -53,7 +53,7 @@ Implementations of calculations from '[Practical Astronomy with your Calculator 
 | 32  | The angle between two celestial objects                                      |                                                                                        |
 | 33  | Rising and setting                                                           |                                                                                        |
 | 34  | Precession                                                                   |                                                                                        |
-| 35  | Nutation                                                                     |                                                                                        |
+| 35  | Nutation                                                                     | nutation                                                                               |
 | 36  | Aberration                                                                   |                                                                                        |
 | 37  | Refraction                                                                   |                                                                                        |
 | 38  | Geocentric parallax and the figure of the Earth                              |                                                                                        |
