@@ -208,7 +208,14 @@ Astronomy.prototype.julianDayNumberToDayOfWeek = function(julianDayNumber) {
 
 Astronomy.prototype.hoursMinutesSecondsToDecimalHours = function(timeOfDay) {
 
-    return (((timeOfDay.seconds / 60) + timeOfDay.minutes) / 60) + timeOfDay.hours;
+    var decimalHours =
+        (((Math.abs(timeOfDay.seconds) / 60) + Math.abs(timeOfDay.minutes)) / 60) + Math.abs(timeOfDay.hours);
+
+    if ((timeOfDay.hours < 0) || (timeOfDay.minutes < 0) || (timeOfDay.seconds < 0)) {
+        decimalHours *= -1;
+    }
+
+    return decimalHours;
 }
 
 /*
@@ -217,7 +224,7 @@ Astronomy.prototype.hoursMinutesSecondsToDecimalHours = function(timeOfDay) {
 
 Astronomy.prototype.decimalHoursToHoursMinutesSeconds = function(decimalHours) {
 
-    var totalSeconds = decimalHours * 3600;
+    var totalSeconds = Math.abs(decimalHours) * 3600;
     var seconds = parseFloat(totalSeconds % 60).toFixed(3);
 
     if (seconds == 60) {
@@ -228,6 +235,10 @@ Astronomy.prototype.decimalHoursToHoursMinutesSeconds = function(decimalHours) {
     var minutes = Math.floor(totalSeconds / 60) % 60;
 
     var hours = Math.floor(totalSeconds / 3600);
+
+    if (decimalHours < 0) {
+        hours *= -1;
+    }
 
     return new TimeOfDay(hours, minutes, seconds);
 }
@@ -357,7 +368,7 @@ Astronomy.prototype.localSiderealTimeToGreenwichSiderealTime = function(timeOfDa
 
 Astronomy.prototype.decimalDegreesToDegreesMinutesSeconds = function(decimalDegrees) {
 
-    var totalSeconds = decimalDegrees * 3600;
+    var totalSeconds = Math.abs(decimalDegrees) * 3600;
     var seconds = parseFloat(totalSeconds % 60).toFixed(3);
 
     if (seconds == 60) {
@@ -369,12 +380,22 @@ Astronomy.prototype.decimalDegreesToDegreesMinutesSeconds = function(decimalDegr
 
     var degrees = Math.floor(totalSeconds / 3600);
 
+    if (decimalDegrees < 0) {
+        degrees *= -1;
+    }
+
     return new DegreesMinutesSeconds(degrees, minutes, seconds);
 }
 
 Astronomy.prototype.degreesMinutesSecondsToDecimalDegrees = function(degreesMinutesSeconds) {
 
-    return (((degreesMinutesSeconds.seconds / 60) + degreesMinutesSeconds.minutes) / 60) + degreesMinutesSeconds.degrees;
+    var decimalDegrees = (((Math.abs(degreesMinutesSeconds.seconds) / 60) + Math.abs(degreesMinutesSeconds.minutes)) / 60) + Math.abs(degreesMinutesSeconds.degrees);
+
+    if ((degreesMinutesSeconds.degrees < 0) || (degreesMinutesSeconds.minutes < 0) || (degreesMinutesSeconds.seconds < 0)) {
+        decimalDegrees *= -1;
+    }
+
+    return decimalDegrees;
 }
 
 /*
@@ -514,19 +535,21 @@ Astronomy.prototype.horizonCoordinatesToEquatorialCoordinates = function(horizon
  * 27 - Ecliptic to equatorial coordinate conversion
  */
 
-// TODO - factor in nutation
 Astronomy.prototype.meanObliquityOfTheEcliptic = function(calendarDate) {
 
     var dateJD = this.dateToJulianDayNumber(calendarDate);
     var epochJD = this.dateToJulianDayNumber(new CalendarDate(2000, 1, 1.5));
     var mJD = dateJD - epochJD;
 
-    var T = mJD / 36525;
+    var T = (mJD / 36525);
 
     var deArcSecs = T * (46.815 + T * (0.0006 - (T * 0.00181)));
     var deDegrees = deArcSecs / 3600;
 
-    var obliquity = 23.439292 - deDegrees;
+    var nutation = this.nutation(calendarDate)
+    var nutationInObliquity = nutation.nutationInObliquity;
+
+    var obliquity = 23.43929167 - deDegrees + nutationInObliquity;
 
     return obliquity;
 }
@@ -539,7 +562,7 @@ Astronomy.prototype.eclipticCoordinatesToEquatorialCoordinates = function(eclipt
     var eclipticLatitudeDegrees = this.degreesMinutesSecondsToDecimalDegrees(eclipticCoordinates.eclipticLatitude);
     var eclipticLatitudeRadians = degreesToRadians(eclipticLatitudeDegrees);
 
-    var obliquityDegrees = this.meanObliquityOfTheEcliptic(calendarDate); // TODO - factor in nutation
+    var obliquityDegrees = this.meanObliquityOfTheEcliptic(calendarDate);
     var obliquityRadians = degreesToRadians(obliquityDegrees);
 
     var sinDeclination =

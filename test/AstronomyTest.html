@@ -207,7 +207,7 @@
 
                 assert.equal(astronomy.hoursMinutesSecondsToDecimalHours(new TimeOfDay(0, 0, 0)), 0);
                 assert.equal(astronomy.hoursMinutesSecondsToDecimalHours(new TimeOfDay(18, 31, 27)), 18.524166666666666);
-                assert.equal(astronomy.hoursMinutesSecondsToDecimalHours(new TimeOfDay(18, 31, 30)), 18.525);
+                assert.equal(astronomy.hoursMinutesSecondsToDecimalHours(new TimeOfDay(-18, 31, 30)), -18.525);
                 assert.equal(astronomy.hoursMinutesSecondsToDecimalHours(new TimeOfDay(20, 0, 0)), 20);
                 assert.equal(astronomy.hoursMinutesSecondsToDecimalHours(new TimeOfDay(23, 59, 59)), 23.99972222222222);
             });
@@ -218,7 +218,7 @@
 
                 assert.equal(astronomy.decimalHoursToHoursMinutesSeconds(0).toString(), new TimeOfDay(0, 0, 0).toString());
                 assert.equal(astronomy.decimalHoursToHoursMinutesSeconds(18.524166666666666).toString(), new TimeOfDay(18, 31, 27).toString());
-                assert.equal(astronomy.decimalHoursToHoursMinutesSeconds(18.525).toString(), new TimeOfDay(18, 31, 30).toString());
+                assert.equal(astronomy.decimalHoursToHoursMinutesSeconds(-18.525).toString(), new TimeOfDay(-18, 31, 30).toString());
                 assert.equal(astronomy.decimalHoursToHoursMinutesSeconds(19.99999999).toString(), new TimeOfDay(20, 0, 0).toString());
                 assert.equal(astronomy.decimalHoursToHoursMinutesSeconds(20).toString(), new TimeOfDay(20, 0, 0).toString());
                 assert.equal(astronomy.decimalHoursToHoursMinutesSeconds(23.99972222222222).toString(), new TimeOfDay(23, 59, 59).toString());
@@ -377,8 +377,8 @@
                     new DegreesMinutesSeconds(182, 13, 19.992).toString());
 
                 assert.equal(
-                    astronomy.decimalDegreesToDegreesMinutesSeconds(182.5241667).toString(),
-                    new DegreesMinutesSeconds(182, 31, 27).toString());
+                    astronomy.decimalDegreesToDegreesMinutesSeconds(-182.5241667).toString(),
+                    new DegreesMinutesSeconds(-182, 31, 27).toString());
             });
 
             test("Degrees, minutes and seconds to decimal degrees ", function(assert) {
@@ -394,6 +394,10 @@
                 assert.equal(
                     astronomy.degreesMinutesSecondsToDecimalDegrees(new DegreesMinutesSeconds(182, 31, 27)),
                     182.52416666666667);
+
+                assert.equal(
+                    astronomy.degreesMinutesSecondsToDecimalDegrees(new DegreesMinutesSeconds(-182, 31, 27)),
+                    -182.52416666666667);
             });
 
             module("22 - Converting between angles expressed in degrees and angles expressed in hours")
@@ -532,8 +536,8 @@
 
             test("Mean obliquity of the ecliptic", function(assert) {
 
-                assert.equal(astronomy.meanObliquityOfTheEcliptic(new CalendarDate(2009, 7, 6)), 23.438055312466062);
-                assert.equal(astronomy.meanObliquityOfTheEcliptic(new CalendarDate(2016, 1, 14)), 23.43720688068752);
+                assert.equal(astronomy.meanObliquityOfTheEcliptic(new CalendarDate(2009, 7, 6)), 23.439231760247182);
+                assert.equal(astronomy.meanObliquityOfTheEcliptic(new CalendarDate(2016, 1, 14)), 23.434542573418017);
             });
 
             test("Ecliptic coordinates to equatorial coordinates", function(assert) {
@@ -546,14 +550,23 @@
                         ),
                         new CalendarDate(2009, 7, 6)
                     ).toString(),
-                    // TODO - after we factor in nutation
-                    // new RaEquatorialCoordinates(
-//                         new TimeOfDay(9, 34, 53.4), // right ascension
-//                         new DegreesMinutesSeconds(19, 32, 8.52) // declination
-//                     ).toString()
                     new RaEquatorialCoordinates(
-                        new TimeOfDay(9, 34, 53.321), // right ascension
-                        new DegreesMinutesSeconds(19, 32, 6.011) // declination
+                      new TimeOfDay(9, 34, 53.402), // right ascension
+                      new DegreesMinutesSeconds(19, 32, 8.517) // declination
+                    ).toString()
+                );
+
+                assert.equal(
+                    astronomy.eclipticCoordinatesToEquatorialCoordinates(
+                        new EclipticCoordinates(
+                            new DegreesMinutesSeconds(-139, 42, 11), // ecliptic longitude
+                            new DegreesMinutesSeconds(5, 53, 30) // ecliptic latitude
+                        ),
+                        new CalendarDate(2016, 3, 27)
+                    ).toString(),
+                    new RaEquatorialCoordinates(
+                         new TimeOfDay(14, 39, 1.152), // right ascension
+                         new DegreesMinutesSeconds(-9, 18, 15.056) // declination
                     ).toString()
                 );
             });
@@ -567,6 +580,14 @@
                     new Nutation(
                         0.0014242608919644941, // nutation in longitude
                         0.0025595885285899364 // nutation in obliquity
+                    ).toString()
+                );
+
+                assert.equal(
+                    astronomy.nutation(new CalendarDate(2016, 3, 27)).toString(),
+                    new Nutation(
+                        -0.0008638060977478596, // nutation in longitude
+                        -0.0023990654557154395 // nutation in obliquity
                     ).toString()
                 );
             });
