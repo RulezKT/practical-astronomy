@@ -40,13 +40,14 @@ Implementations of calculations from '[Practical Astronomy with your Calculator 
 | 19  | Ecliptic coordinates                                                         | N/A                                                                                    |
 | 20  | Galactic coordinates                                                         | N/A                                                                                    |
 | 21  | Converting between decimal degress and degrees, minutes and seconds          | decimalDegreesToDegreesMinutesSeconds, degreesMinutesSecondsToDecimalDegrees           |
-| 22  | Converting between angles expressed in degrees and angles expressed in hours | hoursMinutesSecondsToDegreesMinutesSeconds, degreesMinutesSecondsToHoursMinutesSeconds |
+| 22  | Converting between angles expressed in degrees and angles expressed in hours | decimalHoursToDecimalDegrees, decimalDegreesToDecimalHours,
+                                                                                       hoursMinutesSecondsToDegreesMinutesSeconds degreesMinutesSecondsToHoursMinutesSeconds  |
 | 23  | Converting between one coordinate system and another                         | N/A                                                                                    |
 | 24  | Converting between right ascension and hour angle                            | rightAscensionToHourAngle, hourAngleToRightAscension                                   |
 | 25  | Equatorial to horizon coordinate conversion                                  | equatorialCoordinatesToHorizonCoordinates                                              |
 | 26  | Horizon to equatorial coordinate conversion                                  | horizonCoordinatesToEquatorialCoordinates                                              |
 | 27  | Ecliptic to equatorial coordinate conversion                                 | meanObliquityOfTheEcliptic, eclipticCoordinatesToEquatorialCoordinates                 |
-| 28  | Equatorial to ecliptic coordinate conversion                                 |                                                                                        |
+| 28  | Equatorial to ecliptic coordinate conversion                                 | eclipticCoordinatesToEquatorialCoordinates                                             |
 | 29  | Equatorial to galactic coordinate conversion                                 |                                                                                        |
 | 30  | Galactic to equatorial coordinate conversion                                 |                                                                                        |
 | 31  | Generalised coordinate transformations                                       |                                                                                        |

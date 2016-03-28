@@ -402,6 +402,20 @@
 
             module("22 - Converting between angles expressed in degrees and angles expressed in hours")
 
+            test("Decimal hours to decimal degrees", function(assert) {
+
+                assert.equal(astronomy.decimalHoursToDecimalDegrees(0), 0);
+                assert.equal(astronomy.decimalHoursToDecimalDegrees(1), 15);
+                assert.equal(astronomy.decimalHoursToDecimalDegrees(24), 360);
+            });
+
+            test("Decimal degrees to decimal hours", function(assert) {
+
+                assert.equal(astronomy.decimalDegreesToDecimalHours(0), 0);
+                assert.equal(astronomy.decimalDegreesToDecimalHours(15), 1);
+                assert.equal(astronomy.decimalDegreesToDecimalHours(360), 24);
+            });
+
             test("Hours, minutes and seconds to degrees, minutes and seconds", function(assert) {
 
                 assert.equal(
@@ -587,14 +601,47 @@
                 assert.equal(
                     astronomy.eclipticCoordinatesToEquatorialCoordinates(
                         new EclipticCoordinates(
-                            new DegreesMinutesSeconds(-139, 42, 11), // ecliptic longitude
-                            new DegreesMinutesSeconds(5, 53, 30) // ecliptic latitude
+                            new DegreesMinutesSeconds(220, 18, 49.96), // ecliptic longitude
+                            new DegreesMinutesSeconds(4, 52, 31) // ecliptic latitude
                         ),
                         new CalendarDate(2016, 3, 27)
                     ).toString(),
                     new RaEquatorialCoordinates(
-                         new TimeOfDay(14, 39, 1.152), // right ascension
-                         new DegreesMinutesSeconds(-9, 18, 15.056) // declination
+                         new TimeOfDay(14, 37, 48.87), // right ascension
+                         new DegreesMinutesSeconds(-10, 16, 35.12) // declination
+                    ).toString()
+                );
+            });
+
+            module("28 - Equatorial to ecliptic coordinate conversion")
+
+            test("Equatorial coordinates to ecliptic coordinates", function(assert) {
+
+                assert.equal(
+                    astronomy.equatorialCoordinatesToEclipticCoordinates(
+                        new RaEquatorialCoordinates(
+                          new TimeOfDay(9, 34, 53.402), // right ascension
+                          new DegreesMinutesSeconds(19, 32, 8.517) // declination
+                        ),
+                        new CalendarDate(2009, 7, 6)
+                    ).toString(),
+                    new EclipticCoordinates(
+                        new DegreesMinutesSeconds(139, 41, 9.997), // ecliptic longitude
+                        new DegreesMinutesSeconds(4, 52, 30.999) // ecliptic latitude
+                    ).toString()
+                );
+
+                assert.equal(
+                    astronomy.equatorialCoordinatesToEclipticCoordinates(
+                        new RaEquatorialCoordinates(
+                            new TimeOfDay(14, 37, 48.87), // right ascension
+                            new DegreesMinutesSeconds(-10, 16, 35.12) // declination
+                        ),
+                        new CalendarDate(2016, 3, 27)
+                    ).toString(),
+                    new EclipticCoordinates(
+                        new DegreesMinutesSeconds(220, 18, 49.96), // ecliptic longitude
+                        new DegreesMinutesSeconds(4, 52, 31) // ecliptic latitude
                     ).toString()
                 );
             });
