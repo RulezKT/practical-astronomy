@@ -593,8 +593,8 @@
                         new CalendarDate(2009, 7, 6)
                     ).toString(),
                     new RaEquatorialCoordinates(
-                      new TimeOfDay(9, 34, 53.402), // right ascension
-                      new DegreesMinutesSeconds(19, 32, 8.517) // declination
+                        new TimeOfDay(9, 34, 53.402), // right ascension
+                        new DegreesMinutesSeconds(19, 32, 8.517) // declination
                     ).toString()
                 );
 
@@ -642,6 +642,68 @@
                     new EclipticCoordinates(
                         new DegreesMinutesSeconds(220, 18, 49.96), // ecliptic longitude
                         new DegreesMinutesSeconds(4, 52, 31) // ecliptic latitude
+                    ).toString()
+                );
+            });
+
+            module("29 - Equatorial to galactic coordinate conversion")
+
+            test("Equatorial coordinates to galactic coordinates", function(assert) {
+
+                assert.equal(
+                    astronomy.equatorialCoordinatesToGalacticCoordinates(
+                        new RaEquatorialCoordinates(
+                            new TimeOfDay(10, 21, 0), // right ascension
+                            new DegreesMinutesSeconds(10, 3, 11) // declination
+                        )
+                    ).toString(),
+                    new GalacticCoordinates(
+                        new DegreesMinutesSeconds(232, 14, 52.381), // galactic longitude
+                        new DegreesMinutesSeconds(51, 7, 20.164) // galactic latitude
+                    ).toString()
+                );
+
+                assert.equal(
+                    astronomy.equatorialCoordinatesToGalacticCoordinates(
+                        new RaEquatorialCoordinates(
+                            new TimeOfDay(1, 19, 1), // right ascension
+                            new DegreesMinutesSeconds(9, 5, 12) // declination
+                        )
+                    ).toString(),
+                    new GalacticCoordinates(
+                        new DegreesMinutesSeconds(135, 18, 52.127), // galactic longitude
+                        new DegreesMinutesSeconds(-52, 47, 45.315) // galactic latitude
+                    ).toString()
+                );
+            });
+
+            module("30 - Galactic to equatorial coordinate conversion")
+
+            test("Galactic coordinates to equatorial coordinates", function(assert) {
+
+                assert.equal(
+                    astronomy.galacticCoordinatesToEquatorialCoordinates(
+                        new GalacticCoordinates(
+                            new DegreesMinutesSeconds(232, 14, 52.381), // galactic longitude
+                            new DegreesMinutesSeconds(51, 7, 20.164) // galactic latitude
+                        )
+                    ).toString(),
+                    new RaEquatorialCoordinates(
+                        new TimeOfDay(10, 21, 0), // right ascension
+                        new DegreesMinutesSeconds(10, 3, 11) // declination
+                    ).toString()
+                );
+
+                assert.equal(
+                    astronomy.galacticCoordinatesToEquatorialCoordinates(
+                        new GalacticCoordinates(
+                            new DegreesMinutesSeconds(135, 18, 52.127), // galactic longitude
+                            new DegreesMinutesSeconds(-52, 47, 45.315) // galactic latitude
+                        )
+                    ).toString(),
+                    new RaEquatorialCoordinates(
+                        new TimeOfDay(1, 19, 1), // right ascension
+                        new DegreesMinutesSeconds(9, 5, 12) // declination
                     ).toString()
                 );
             });

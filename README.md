@@ -47,8 +47,8 @@ Implementations of calculations from '[Practical Astronomy with your Calculator 
 | 26  | Horizon to equatorial coordinate conversion                                  | horizonCoordinatesToEquatorialCoordinates                                              |
 | 27  | Ecliptic to equatorial coordinate conversion                                 | meanObliquityOfTheEcliptic, eclipticCoordinatesToEquatorialCoordinates                 |
 | 28  | Equatorial to ecliptic coordinate conversion                                 | equatorialCoordinatesToEclipticCoordinates                                             |
-| 29  | Equatorial to galactic coordinate conversion                                 |                                                                                        |
-| 30  | Galactic to equatorial coordinate conversion                                 |                                                                                        |
+| 29  | Equatorial to galactic coordinate conversion                                 | equatorialCoordinatesToGalacticCoordinates                                             |
+| 30  | Galactic to equatorial coordinate conversion                                 | galacticCoordinatesToEquatorialCoordinates                                             |
 | 31  | Generalised coordinate transformations                                       |                                                                                        |
 | 32  | The angle between two celestial objects                                      |                                                                                        |
 | 33  | Rising and setting                                                           |                                                                                        |

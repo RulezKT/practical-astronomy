@@ -635,6 +635,71 @@ Astronomy.prototype.equatorialCoordinatesToEclipticCoordinates = function(equato
 }
 
 /*
+ * 29 - Equatorial to galactic coordinate conversion
+ */
+
+Astronomy.prototype.equatorialCoordinatesToGalacticCoordinates = function(equatorialCoordinates) {
+
+    var rightAscensionDegrees = this.decimalHoursToDecimalDegrees(this.hoursMinutesSecondsToDecimalHours(equatorialCoordinates.rightAscension));
+    var rightAscensionRadians = degreesToRadians(rightAscensionDegrees);
+
+    var declinationDegrees = this.degreesMinutesSecondsToDecimalDegrees(equatorialCoordinates.declination);
+    var declinationRadians = degreesToRadians(declinationDegrees);
+
+    var sinGalacticLatitude =
+        Math.cos(declinationRadians) * Math.cos(degreesToRadians(27.4)) * Math.cos(rightAscensionRadians - degreesToRadians(192.25)) +
+        Math.sin(declinationRadians) * Math.sin(degreesToRadians(27.4));
+
+    var galacticLatitudeRadians = Math.asin(sinGalacticLatitude);
+    var galacticLatitudeDegrees = radiansToDegrees(galacticLatitudeRadians);
+
+    var y = Math.sin(declinationRadians) - sinGalacticLatitude * Math.sin(degreesToRadians(27.4));
+    var x = Math.cos(declinationRadians) * Math.sin(rightAscensionRadians - degreesToRadians(192.25)) * Math.cos(degreesToRadians(27.4));
+
+    var galacticLongitudeDegrees = radiansToDegrees(Math.atan2(y, x)) + 33;
+    galacticLongitudeDegrees = galacticLongitudeDegrees - (360 * Math.floor(galacticLongitudeDegrees / 360));
+
+    return new GalacticCoordinates(
+        this.decimalDegreesToDegreesMinutesSeconds(galacticLongitudeDegrees),
+        this.decimalDegreesToDegreesMinutesSeconds(galacticLatitudeDegrees)
+    );
+}
+
+/*
+ * 30 - Galatic to equatorial coordinate conversion
+ */
+
+Astronomy.prototype.galacticCoordinatesToEquatorialCoordinates = function(galacticCoordinates) {
+
+    var galacticLongitudeDegrees = this.degreesMinutesSecondsToDecimalDegrees(galacticCoordinates.galacticLongitude);
+    var galacticLongitudeRadians = degreesToRadians(galacticLongitudeDegrees);
+
+    var galacticLatitudeDegrees = this.degreesMinutesSecondsToDecimalDegrees(galacticCoordinates.galacticLatitude);
+    var galacticLatitudeRadians = degreesToRadians(galacticLatitudeDegrees);
+
+    var sinDeclination =
+        Math.cos(galacticLatitudeRadians) * Math.cos(degreesToRadians(27.4)) * Math.sin(galacticLongitudeRadians - degreesToRadians(33)) +
+        Math.sin(galacticLatitudeRadians) * Math.sin(degreesToRadians(27.4));
+
+    var declinationRadians = Math.asin(sinDeclination);
+    var declinationDegrees = radiansToDegrees(declinationRadians);
+
+    var y = Math.cos(galacticLatitudeRadians) * Math.cos(galacticLongitudeRadians - degreesToRadians(33));
+    var x = Math.sin(galacticLatitudeRadians) * Math.cos(degreesToRadians(27.4)) -
+            Math.cos(galacticLatitudeRadians) * Math.sin(degreesToRadians(27.4)) * Math.sin(galacticLongitudeRadians - degreesToRadians(33));
+
+    var rightAscensionDegrees = radiansToDegrees(Math.atan2(y, x)) + 192.25;
+    rightAscensionDegrees = rightAscensionDegrees - (360 * Math.floor(rightAscensionDegrees / 360));
+
+    var rightAscensionDecimalHours = this.decimalDegreesToDecimalHours(rightAscensionDegrees);
+
+    return new RaEquatorialCoordinates(
+        this.decimalHoursToHoursMinutesSeconds(rightAscensionDecimalHours),
+        this.decimalDegreesToDegreesMinutesSeconds(declinationDegrees)
+    );
+}
+
+/*
  * 35 - Nutation
  */
 
@@ -798,6 +863,17 @@ function EclipticCoordinates(eclipticLongitude, eclipticLatitude) {
 EclipticCoordinates.prototype.toString = function() {
 
     return "λ=" + this.eclipticLongitude + ", β=" + this.eclipticLatitude;
+}
+
+function GalacticCoordinates(galacticLongitude, galacticLatitude) {
+
+    this.galacticLongitude = galacticLongitude;
+    this.galacticLatitude = galacticLatitude;
+}
+
+GalacticCoordinates.prototype.toString = function() {
+
+    return "l=" + this.galacticLongitude + ", b=" + this.galacticLatitude;
 }
 
 function Nutation(nutationInLongitude, nutationInObliquity) {
