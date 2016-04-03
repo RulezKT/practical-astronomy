@@ -708,6 +708,42 @@
                 );
             });
 
+            module("32 - The angle between two celestial objects")
+
+            test("Angle between equatorial coordinates", function(assert) {
+
+                assert.equal(
+                    astronomy.angleBetweenEquatorialCoordinates(
+                        new RaEquatorialCoordinates(
+                            new TimeOfDay(5, 13, 31.7), // right ascension
+                            new DegreesMinutesSeconds(-8, 13, 30) // declination
+                        ),
+                        new RaEquatorialCoordinates(
+                            new TimeOfDay(6, 44, 13.4), // right ascension
+                            new DegreesMinutesSeconds(-16, 41, 11) // declination
+                        )
+                    ).toString(),
+                    new DegreesMinutesSeconds(23, 40, 25.858).toString()
+                );
+            });
+
+            test("Angle between ecliptic coordinates", function(assert) {
+
+                assert.equal(
+                    astronomy.angleBetweenEclipticCoordinates(
+                        new EclipticCoordinates(
+                            new DegreesMinutesSeconds(5, 13, 31.7), // ecliptic longitude
+                            new DegreesMinutesSeconds(-8, 13, 30) // ecliptic latitude
+                        ),
+                        new EclipticCoordinates(
+                            new DegreesMinutesSeconds(6, 44, 13.4), // ecliptic longitude
+                            new DegreesMinutesSeconds(-16, 41, 11) // ecliptic latitude
+                        )
+                    ).toString(),
+                    new DegreesMinutesSeconds(8, 35, 20.028).toString()
+                );
+            });
+
             module("35 - Nutation")
 
             test("Nutation", function(assert) {

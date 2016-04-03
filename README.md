@@ -50,7 +50,7 @@ Implementations of calculations from '[Practical Astronomy with your Calculator 
 | 29  | Equatorial to galactic coordinate conversion                                 | equatorialCoordinatesToGalacticCoordinates                                             |
 | 30  | Galactic to equatorial coordinate conversion                                 | galacticCoordinatesToEquatorialCoordinates                                             |
 | 31  | Generalised coordinate transformations                                       |                                                                                        |
-| 32  | The angle between two celestial objects                                      |                                                                                        |
+| 32  | The angle between two celestial objects                                      | angleBetweenEquatorialCoordinates, angleBetweenEclipticCoordinates                     |
 | 33  | Rising and setting                                                           |                                                                                        |
 | 34  | Precession                                                                   |                                                                                        |
 | 35  | Nutation                                                                     | nutation                                                                               |

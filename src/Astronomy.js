@@ -700,6 +700,58 @@ Astronomy.prototype.galacticCoordinatesToEquatorialCoordinates = function(galact
 }
 
 /*
+ * 32 - The angle between two celestial objects
+ */
+
+Astronomy.prototype.angleBetweenEquatorialCoordinates = function(equatorialCoordinates1, equatorialCoordinates2) {
+
+    var rightAscensionDegrees1 = this.decimalHoursToDecimalDegrees(this.hoursMinutesSecondsToDecimalHours(equatorialCoordinates1.rightAscension));
+    var rightAscensionRadians1 = degreesToRadians(rightAscensionDegrees1);
+
+    var declinationDegrees1 = this.degreesMinutesSecondsToDecimalDegrees(equatorialCoordinates1.declination);
+    var declinationRadians1 = degreesToRadians(declinationDegrees1);
+
+    var rightAscensionDegrees2 = this.decimalHoursToDecimalDegrees(this.hoursMinutesSecondsToDecimalHours(equatorialCoordinates2.rightAscension));
+    var rightAscensionRadians2 = degreesToRadians(rightAscensionDegrees2);
+
+    var declinationDegrees2 = this.degreesMinutesSecondsToDecimalDegrees(equatorialCoordinates2.declination);
+    var declinationRadians2 = degreesToRadians(declinationDegrees2);
+
+    var cosAngle =
+       Math.sin(declinationRadians1) * Math.sin(declinationRadians2) +
+       Math.cos(declinationRadians1) * Math.cos(declinationRadians2) * Math.cos(rightAscensionRadians1 - rightAscensionRadians2);
+
+    var angleRadians = Math.acos(cosAngle);
+    var angleDegrees = radiansToDegrees(angleRadians);
+
+    return this.decimalDegreesToDegreesMinutesSeconds(angleDegrees);
+}
+
+Astronomy.prototype.angleBetweenEclipticCoordinates = function(eclipticCoordinates1, eclipticCoordinates2) {
+
+    var eclipticLongitudeDegrees1 = this.degreesMinutesSecondsToDecimalDegrees(eclipticCoordinates1.eclipticLongitude);
+    var eclipticLongitudeRadians1 = degreesToRadians(eclipticLongitudeDegrees1);
+
+    var eclipticLatitudeDegrees1 = this.degreesMinutesSecondsToDecimalDegrees(eclipticCoordinates1.eclipticLatitude);
+    var eclipticLatitudeRadians1 = degreesToRadians(eclipticLatitudeDegrees1);
+
+    var eclipticLongitudeDegrees2 = this.degreesMinutesSecondsToDecimalDegrees(eclipticCoordinates2.eclipticLongitude);
+    var eclipticLongitudeRadians2 = degreesToRadians(eclipticLongitudeDegrees2);
+
+    var eclipticLatitudeDegrees2 = this.degreesMinutesSecondsToDecimalDegrees(eclipticCoordinates2.eclipticLatitude);
+    var eclipticLatitudeRadians2 = degreesToRadians(eclipticLatitudeDegrees2);
+
+    var cosAngle =
+        Math.sin(eclipticLatitudeRadians1) * Math.sin(eclipticLatitudeRadians2) +
+        Math.cos(eclipticLatitudeRadians1) * Math.cos(eclipticLatitudeRadians2) * Math.cos(eclipticLongitudeRadians1 - eclipticLongitudeRadians2);
+
+    var angleRadians = Math.acos(cosAngle);
+    var angleDegrees = radiansToDegrees(angleRadians);
+
+    return this.decimalDegreesToDegreesMinutesSeconds(angleDegrees);
+}
+
+/*
  * 35 - Nutation
  */
 
