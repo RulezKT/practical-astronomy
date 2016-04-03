@@ -474,13 +474,13 @@ Astronomy.prototype.hourAngleToRightAscension = function(hourAngle, dateAndTime,
  * 25 - Equatorial to horizon coordinate conversion
  */
 
-Astronomy.prototype.equatorialCoordinatesToHorizonCoordinates = function(haEquatorialCoordinates, latitude) {
+Astronomy.prototype.hourAngleEquatorialCoordinatesToHorizonCoordinates = function(hourAngleEquatorialCoordinates, latitude) {
 
-    var hourAngleDecimalHours = this.hoursMinutesSecondsToDecimalHours(haEquatorialCoordinates.hourAngle);
+    var hourAngleDecimalHours = this.hoursMinutesSecondsToDecimalHours(hourAngleEquatorialCoordinates.hourAngle);
     var hourAngleDegrees = hourAngleDecimalHours * 15;
     var hourAngleRadians = degreesToRadians(hourAngleDegrees);
 
-    var declinationDecimalDegrees = this.degreesMinutesSecondsToDecimalDegrees(haEquatorialCoordinates.declination);
+    var declinationDecimalDegrees = this.degreesMinutesSecondsToDecimalDegrees(hourAngleEquatorialCoordinates.declination);
     var declinationRadians = degreesToRadians(declinationDecimalDegrees);
 
     var latitudeRadians = degreesToRadians(latitude);
@@ -510,7 +510,7 @@ Astronomy.prototype.equatorialCoordinatesToHorizonCoordinates = function(haEquat
  * 26 - Horizon to equatorial coordinate conversion
  */
 
-Astronomy.prototype.horizonCoordinatesToEquatorialCoordinates = function(horizonCoordinates, latitude) {
+Astronomy.prototype.horizonCoordinatesToHourAngleEquatorialCoordinates = function(horizonCoordinates, latitude) {
 
     var azimuthDegrees = this.degreesMinutesSecondsToDecimalDegrees(horizonCoordinates.azimuth);
     var azimuthRadians = degreesToRadians(azimuthDegrees);
@@ -537,7 +537,7 @@ Astronomy.prototype.horizonCoordinatesToEquatorialCoordinates = function(horizon
 
     var hourAngleDecimalHours = this.decimalDegreesToDecimalHours(hourAngleDegrees);
 
-    return new HaEquatorialCoordinates(
+    return new HourAngleEquatorialCoordinates(
         this.decimalHoursToHoursMinutesSeconds(hourAngleDecimalHours),
         this.decimalDegreesToDegreesMinutesSeconds(declinationDegrees));
 }
@@ -565,7 +565,7 @@ Astronomy.prototype.meanObliquityOfTheEcliptic = function(calendarDate) {
     return obliquity;
 }
 
-Astronomy.prototype.eclipticCoordinatesToEquatorialCoordinates = function(eclipticCoordinates, calendarDate) {
+Astronomy.prototype.eclipticCoordinatesToRightAscensionEquatorialCoordinates = function(eclipticCoordinates, calendarDate) {
 
     var eclipticLongitudeDegrees = this.degreesMinutesSecondsToDecimalDegrees(eclipticCoordinates.eclipticLongitude);
     var eclipticLongitudeRadians = degreesToRadians(eclipticLongitudeDegrees);
@@ -593,7 +593,7 @@ Astronomy.prototype.eclipticCoordinatesToEquatorialCoordinates = function(eclipt
 
     var rightAscensionDecimalHours = this.decimalDegreesToDecimalHours(rightAscensionDegrees);
 
-    return new RaEquatorialCoordinates(
+    return new RightAscensionEquatorialCoordinates(
         this.decimalHoursToHoursMinutesSeconds(rightAscensionDecimalHours),
         this.decimalDegreesToDegreesMinutesSeconds(declinationDegrees));
 }
@@ -602,12 +602,12 @@ Astronomy.prototype.eclipticCoordinatesToEquatorialCoordinates = function(eclipt
  * 28 - Equatorial to ecliptic coordinate conversion
  */
 
-Astronomy.prototype.equatorialCoordinatesToEclipticCoordinates = function(equatorialCoordinates, calendarDate) {
+Astronomy.prototype.rightAscensionEquatorialCoordinatesToEclipticCoordinates = function(rightAscensionEquatorialCoordinates, calendarDate) {
 
-    var rightAscensionDegrees = this.decimalHoursToDecimalDegrees(this.hoursMinutesSecondsToDecimalHours(equatorialCoordinates.rightAscension));
+    var rightAscensionDegrees = this.decimalHoursToDecimalDegrees(this.hoursMinutesSecondsToDecimalHours(rightAscensionEquatorialCoordinates.rightAscension));
     var rightAscensionRadians = degreesToRadians(rightAscensionDegrees);
 
-    var declinationDegrees = this.degreesMinutesSecondsToDecimalDegrees(equatorialCoordinates.declination);
+    var declinationDegrees = this.degreesMinutesSecondsToDecimalDegrees(rightAscensionEquatorialCoordinates.declination);
     var declinationRadians = degreesToRadians(declinationDegrees);
 
     var obliquityDegrees = this.meanObliquityOfTheEcliptic(calendarDate);
@@ -638,12 +638,12 @@ Astronomy.prototype.equatorialCoordinatesToEclipticCoordinates = function(equato
  * 29 - Equatorial to galactic coordinate conversion
  */
 
-Astronomy.prototype.equatorialCoordinatesToGalacticCoordinates = function(equatorialCoordinates) {
+Astronomy.prototype.rightAscensionEquatorialCoordinatesToGalacticCoordinates = function(rightAscensionEquatorialCoordinates) {
 
-    var rightAscensionDegrees = this.decimalHoursToDecimalDegrees(this.hoursMinutesSecondsToDecimalHours(equatorialCoordinates.rightAscension));
+    var rightAscensionDegrees = this.decimalHoursToDecimalDegrees(this.hoursMinutesSecondsToDecimalHours(rightAscensionEquatorialCoordinates.rightAscension));
     var rightAscensionRadians = degreesToRadians(rightAscensionDegrees);
 
-    var declinationDegrees = this.degreesMinutesSecondsToDecimalDegrees(equatorialCoordinates.declination);
+    var declinationDegrees = this.degreesMinutesSecondsToDecimalDegrees(rightAscensionEquatorialCoordinates.declination);
     var declinationRadians = degreesToRadians(declinationDegrees);
 
     var sinGalacticLatitude =
@@ -669,7 +669,7 @@ Astronomy.prototype.equatorialCoordinatesToGalacticCoordinates = function(equato
  * 30 - Galatic to equatorial coordinate conversion
  */
 
-Astronomy.prototype.galacticCoordinatesToEquatorialCoordinates = function(galacticCoordinates) {
+Astronomy.prototype.galacticCoordinatesToRightAscensionEquatorialCoordinates = function(galacticCoordinates) {
 
     var galacticLongitudeDegrees = this.degreesMinutesSecondsToDecimalDegrees(galacticCoordinates.galacticLongitude);
     var galacticLongitudeRadians = degreesToRadians(galacticLongitudeDegrees);
@@ -693,7 +693,7 @@ Astronomy.prototype.galacticCoordinatesToEquatorialCoordinates = function(galact
 
     var rightAscensionDecimalHours = this.decimalDegreesToDecimalHours(rightAscensionDegrees);
 
-    return new RaEquatorialCoordinates(
+    return new RightAscensionEquatorialCoordinates(
         this.decimalHoursToHoursMinutesSeconds(rightAscensionDecimalHours),
         this.decimalDegreesToDegreesMinutesSeconds(declinationDegrees)
     );
@@ -703,18 +703,18 @@ Astronomy.prototype.galacticCoordinatesToEquatorialCoordinates = function(galact
  * 32 - The angle between two celestial objects
  */
 
-Astronomy.prototype.angleBetweenEquatorialCoordinates = function(equatorialCoordinates1, equatorialCoordinates2) {
+Astronomy.prototype.angleBetweenRightAscensionEquatorialCoordinates = function(rightAscensionEquatorialCoordinates1, rightAscensionEquatorialCoordinates2) {
 
-    var rightAscensionDegrees1 = this.decimalHoursToDecimalDegrees(this.hoursMinutesSecondsToDecimalHours(equatorialCoordinates1.rightAscension));
+    var rightAscensionDegrees1 = this.decimalHoursToDecimalDegrees(this.hoursMinutesSecondsToDecimalHours(rightAscensionEquatorialCoordinates1.rightAscension));
     var rightAscensionRadians1 = degreesToRadians(rightAscensionDegrees1);
 
-    var declinationDegrees1 = this.degreesMinutesSecondsToDecimalDegrees(equatorialCoordinates1.declination);
+    var declinationDegrees1 = this.degreesMinutesSecondsToDecimalDegrees(rightAscensionEquatorialCoordinates1.declination);
     var declinationRadians1 = degreesToRadians(declinationDegrees1);
 
-    var rightAscensionDegrees2 = this.decimalHoursToDecimalDegrees(this.hoursMinutesSecondsToDecimalHours(equatorialCoordinates2.rightAscension));
+    var rightAscensionDegrees2 = this.decimalHoursToDecimalDegrees(this.hoursMinutesSecondsToDecimalHours(rightAscensionEquatorialCoordinates2.rightAscension));
     var rightAscensionRadians2 = degreesToRadians(rightAscensionDegrees2);
 
-    var declinationDegrees2 = this.degreesMinutesSecondsToDecimalDegrees(equatorialCoordinates2.declination);
+    var declinationDegrees2 = this.degreesMinutesSecondsToDecimalDegrees(rightAscensionEquatorialCoordinates2.declination);
     var declinationRadians2 = degreesToRadians(declinationDegrees2);
 
     var cosAngle =
@@ -873,24 +873,24 @@ DegreesMinutesSeconds.prototype.toString = function() {
     return this.degrees + "° " + this.minutes + "' " + seconds + "." + milliseconds + "\"";
 }
 
-function HaEquatorialCoordinates(hourAngle, declination) {
+function HourAngleEquatorialCoordinates(hourAngle, declination) {
 
     this.hourAngle = hourAngle;
     this.declination = declination;
 }
 
-HaEquatorialCoordinates.prototype.toString = function() {
+HourAngleEquatorialCoordinates.prototype.toString = function() {
 
     return "H=" + this.hourAngle + ", δ=" + this.declination;
 }
 
-function RaEquatorialCoordinates(rightAscension, declination) {
+function RightAscensionEquatorialCoordinates(rightAscension, declination) {
 
     this.rightAscension = rightAscension;
     this.declination = declination;
 }
 
-RaEquatorialCoordinates.prototype.toString = function() {
+RightAscensionEquatorialCoordinates.prototype.toString = function() {
 
     return "α=" + this.rightAscension + ", δ=" + this.declination;
 }

@@ -43,14 +43,14 @@ Implementations of calculations from '[Practical Astronomy with your Calculator 
 | 22  | Converting between angles expressed in degrees and angles expressed in hours | decimalHoursToDecimalDegrees, decimalDegreesToDecimalHours, hoursMinutesSecondsToDegreesMinutesSeconds degreesMinutesSecondsToHoursMinutesSeconds  |
 | 23  | Converting between one coordinate system and another                         | N/A                                                                                    |
 | 24  | Converting between right ascension and hour angle                            | rightAscensionToHourAngle, hourAngleToRightAscension                                   |
-| 25  | Equatorial to horizon coordinate conversion                                  | equatorialCoordinatesToHorizonCoordinates                                              |
-| 26  | Horizon to equatorial coordinate conversion                                  | horizonCoordinatesToEquatorialCoordinates                                              |
-| 27  | Ecliptic to equatorial coordinate conversion                                 | meanObliquityOfTheEcliptic, eclipticCoordinatesToEquatorialCoordinates                 |
-| 28  | Equatorial to ecliptic coordinate conversion                                 | equatorialCoordinatesToEclipticCoordinates                                             |
-| 29  | Equatorial to galactic coordinate conversion                                 | equatorialCoordinatesToGalacticCoordinates                                             |
-| 30  | Galactic to equatorial coordinate conversion                                 | galacticCoordinatesToEquatorialCoordinates                                             |
+| 25  | Equatorial to horizon coordinate conversion                                  | hourAngleEquatorialCoordinatesToHorizonCoordinates                                     |
+| 26  | Horizon to equatorial coordinate conversion                                  | horizonCoordinatesToHourAngleEquatorialCoordinates                                     |
+| 27  | Ecliptic to equatorial coordinate conversion                                 | meanObliquityOfTheEcliptic, eclipticCoordinatesToRightAscensionEquatorialCoordinates   |
+| 28  | Equatorial to ecliptic coordinate conversion                                 | rightAscensionEquatorialCoordinatesToEclipticCoordinates                               |
+| 29  | Equatorial to galactic coordinate conversion                                 | rightAscensionEquatorialCoordinatesToGalacticCoordinates                               |
+| 30  | Galactic to equatorial coordinate conversion                                 | galacticCoordinatesToRightAscensionEquatorialCoordinates                               |
 | 31  | Generalised coordinate transformations                                       |                                                                                        |
-| 32  | The angle between two celestial objects                                      | angleBetweenEquatorialCoordinates, angleBetweenEclipticCoordinates                     |
+| 32  | The angle between two celestial objects                                      | angleBetweenRightAscensionEquatorialCoordinates, angleBetweenEclipticCoordinates       |
 | 33  | Rising and setting                                                           |                                                                                        |
 | 34  | Precession                                                                   |                                                                                        |
 | 35  | Nutation                                                                     | nutation                                                                               |

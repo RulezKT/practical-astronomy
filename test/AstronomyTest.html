@@ -510,11 +510,11 @@
 
             module("25 - Equatorial to horizon coordinate conversion")
 
-            test("Equatorial coordinates to horizon coordinates", function(assert) {
+            test("Hour angle equatorial coordinates to horizon coordinates", function(assert) {
 
                 assert.equal(
-                    astronomy.equatorialCoordinatesToHorizonCoordinates(
-                        new HaEquatorialCoordinates(
+                    astronomy.hourAngleEquatorialCoordinatesToHorizonCoordinates(
+                        new HourAngleEquatorialCoordinates(
                             new TimeOfDay(5, 51, 44), // hour angle
                             new DegreesMinutesSeconds(23, 13, 10) // declination
                         ),
@@ -527,8 +527,8 @@
                 );
 
                 assert.equal(
-                    astronomy.equatorialCoordinatesToHorizonCoordinates(
-                        new HaEquatorialCoordinates(
+                    astronomy.hourAngleEquatorialCoordinatesToHorizonCoordinates(
+                        new HourAngleEquatorialCoordinates(
                             new TimeOfDay(18, 29, 30.206), // hour angle
                             new DegreesMinutesSeconds(18, 4, 49.351) // declination
                         ),
@@ -543,31 +543,31 @@
 
             module("26 - Horizon to equatorial coordinate conversion")
 
-            test("Horizon coordinates to equatorial coordinates", function(assert) {
+            test("Horizon coordinates to hour angle equatorial coordinates", function(assert) {
 
                 assert.equal(
-                    astronomy.horizonCoordinatesToEquatorialCoordinates(
+                    astronomy.horizonCoordinatesToHourAngleEquatorialCoordinates(
                         new HorizonCoordinates(
                             new DegreesMinutesSeconds(283, 16, 15.698), // azimuth
                             new DegreesMinutesSeconds(19, 20, 3.643) // altitude
                         ),
                         52 // latitude
                     ).toString(),
-                    new HaEquatorialCoordinates(
+                    new HourAngleEquatorialCoordinates(
                         new TimeOfDay(5, 51, 44), // hour angle
                         new DegreesMinutesSeconds(23, 13, 10) // declination
                     ).toString()
                 );
 
                 assert.equal(
-                    astronomy.horizonCoordinatesToEquatorialCoordinates(
+                    astronomy.horizonCoordinatesToHourAngleEquatorialCoordinates(
                         new HorizonCoordinates(
                             new DegreesMinutesSeconds(83, 15, 16.8), // azimuth
                             new DegreesMinutesSeconds(18, 19, 4.51) // altitude
                         ),
                         49 // latitude
                     ).toString(),
-                    new HaEquatorialCoordinates(
+                    new HourAngleEquatorialCoordinates(
                         new TimeOfDay(18, 29, 30.206), // hour angle
                         new DegreesMinutesSeconds(18, 4, 49.351) // declination
                     ).toString()
@@ -582,31 +582,31 @@
                 assert.equal(astronomy.meanObliquityOfTheEcliptic(new CalendarDate(2016, 1, 14)), 23.434542573418017);
             });
 
-            test("Ecliptic coordinates to equatorial coordinates", function(assert) {
+            test("Ecliptic coordinates to right ascension equatorial coordinates", function(assert) {
 
                 assert.equal(
-                    astronomy.eclipticCoordinatesToEquatorialCoordinates(
+                    astronomy.eclipticCoordinatesToRightAscensionEquatorialCoordinates(
                         new EclipticCoordinates(
                             new DegreesMinutesSeconds(139, 41, 10), // ecliptic longitude
                             new DegreesMinutesSeconds(4, 52, 31) // ecliptic latitude
                         ),
                         new CalendarDate(2009, 7, 6)
                     ).toString(),
-                    new RaEquatorialCoordinates(
+                    new RightAscensionEquatorialCoordinates(
                         new TimeOfDay(9, 34, 53.402), // right ascension
                         new DegreesMinutesSeconds(19, 32, 8.517) // declination
                     ).toString()
                 );
 
                 assert.equal(
-                    astronomy.eclipticCoordinatesToEquatorialCoordinates(
+                    astronomy.eclipticCoordinatesToRightAscensionEquatorialCoordinates(
                         new EclipticCoordinates(
                             new DegreesMinutesSeconds(220, 18, 49.96), // ecliptic longitude
                             new DegreesMinutesSeconds(4, 52, 31) // ecliptic latitude
                         ),
                         new CalendarDate(2016, 3, 27)
                     ).toString(),
-                    new RaEquatorialCoordinates(
+                    new RightAscensionEquatorialCoordinates(
                          new TimeOfDay(14, 37, 48.87), // right ascension
                          new DegreesMinutesSeconds(-10, 16, 35.12) // declination
                     ).toString()
@@ -615,11 +615,11 @@
 
             module("28 - Equatorial to ecliptic coordinate conversion")
 
-            test("Equatorial coordinates to ecliptic coordinates", function(assert) {
+            test("Right ascension equatorial coordinates to ecliptic coordinates", function(assert) {
 
                 assert.equal(
-                    astronomy.equatorialCoordinatesToEclipticCoordinates(
-                        new RaEquatorialCoordinates(
+                    astronomy.rightAscensionEquatorialCoordinatesToEclipticCoordinates(
+                        new RightAscensionEquatorialCoordinates(
                           new TimeOfDay(9, 34, 53.402), // right ascension
                           new DegreesMinutesSeconds(19, 32, 8.517) // declination
                         ),
@@ -632,8 +632,8 @@
                 );
 
                 assert.equal(
-                    astronomy.equatorialCoordinatesToEclipticCoordinates(
-                        new RaEquatorialCoordinates(
+                    astronomy.rightAscensionEquatorialCoordinatesToEclipticCoordinates(
+                        new RightAscensionEquatorialCoordinates(
                             new TimeOfDay(14, 37, 48.87), // right ascension
                             new DegreesMinutesSeconds(-10, 16, 35.12) // declination
                         ),
@@ -648,11 +648,11 @@
 
             module("29 - Equatorial to galactic coordinate conversion")
 
-            test("Equatorial coordinates to galactic coordinates", function(assert) {
+            test("Right ascension equatorial coordinates to galactic coordinates", function(assert) {
 
                 assert.equal(
-                    astronomy.equatorialCoordinatesToGalacticCoordinates(
-                        new RaEquatorialCoordinates(
+                    astronomy.rightAscensionEquatorialCoordinatesToGalacticCoordinates(
+                        new RightAscensionEquatorialCoordinates(
                             new TimeOfDay(10, 21, 0), // right ascension
                             new DegreesMinutesSeconds(10, 3, 11) // declination
                         )
@@ -664,8 +664,8 @@
                 );
 
                 assert.equal(
-                    astronomy.equatorialCoordinatesToGalacticCoordinates(
-                        new RaEquatorialCoordinates(
+                    astronomy.rightAscensionEquatorialCoordinatesToGalacticCoordinates(
+                        new RightAscensionEquatorialCoordinates(
                             new TimeOfDay(1, 19, 1), // right ascension
                             new DegreesMinutesSeconds(9, 5, 12) // declination
                         )
@@ -679,29 +679,29 @@
 
             module("30 - Galactic to equatorial coordinate conversion")
 
-            test("Galactic coordinates to equatorial coordinates", function(assert) {
+            test("Galactic coordinates to right ascension equatorial coordinates", function(assert) {
 
                 assert.equal(
-                    astronomy.galacticCoordinatesToEquatorialCoordinates(
+                    astronomy.galacticCoordinatesToRightAscensionEquatorialCoordinates(
                         new GalacticCoordinates(
                             new DegreesMinutesSeconds(232, 14, 52.381), // galactic longitude
                             new DegreesMinutesSeconds(51, 7, 20.164) // galactic latitude
                         )
                     ).toString(),
-                    new RaEquatorialCoordinates(
+                    new RightAscensionEquatorialCoordinates(
                         new TimeOfDay(10, 21, 0), // right ascension
                         new DegreesMinutesSeconds(10, 3, 11) // declination
                     ).toString()
                 );
 
                 assert.equal(
-                    astronomy.galacticCoordinatesToEquatorialCoordinates(
+                    astronomy.galacticCoordinatesToRightAscensionEquatorialCoordinates(
                         new GalacticCoordinates(
                             new DegreesMinutesSeconds(135, 18, 52.127), // galactic longitude
                             new DegreesMinutesSeconds(-52, 47, 45.315) // galactic latitude
                         )
                     ).toString(),
-                    new RaEquatorialCoordinates(
+                    new RightAscensionEquatorialCoordinates(
                         new TimeOfDay(1, 19, 1), // right ascension
                         new DegreesMinutesSeconds(9, 5, 12) // declination
                     ).toString()
@@ -710,15 +710,15 @@
 
             module("32 - The angle between two celestial objects")
 
-            test("Angle between equatorial coordinates", function(assert) {
+            test("Angle between right ascension equatorial coordinates", function(assert) {
 
                 assert.equal(
-                    astronomy.angleBetweenEquatorialCoordinates(
-                        new RaEquatorialCoordinates(
+                    astronomy.angleBetweenRightAscensionEquatorialCoordinates(
+                        new RightAscensionEquatorialCoordinates(
                             new TimeOfDay(5, 13, 31.7), // right ascension
                             new DegreesMinutesSeconds(-8, 13, 30) // declination
                         ),
-                        new RaEquatorialCoordinates(
+                        new RightAscensionEquatorialCoordinates(
                             new TimeOfDay(6, 44, 13.4), // right ascension
                             new DegreesMinutesSeconds(-16, 41, 11) // declination
                         )
