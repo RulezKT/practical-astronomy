@@ -453,28 +453,28 @@
                 assert.equal(
                     astronomy.rightAscensionToHourAngle(
                         new TimeOfDay(18, 32, 21),
+                        -64,
                         new DateAndTime(new CalendarDate(1980, 4, 22), new TimeOfDay(14, 36, 51.67)),
                         -4,
-                        0,
-                        -64).toString(),
+                        0).toString(),
                     new TimeOfDay(9, 52, 23.655).toString());
 
                 assert.equal( // Daylight Savings Time, Positive Zone Correction
                     astronomy.rightAscensionToHourAngle(
                         new TimeOfDay(18, 32, 21),
+                        -64,
                         new DateAndTime(new CalendarDate(1980, 4, 22), new TimeOfDay(14, 36, 51.67)),
                         4,
-                        1,
-                        -64).toString(),
+                        1).toString(),
                     new TimeOfDay(0, 50, 54.947).toString());
 
                 assert.equal( // Positive Longitude
                     astronomy.rightAscensionToHourAngle(
                         new TimeOfDay(18, 32, 21),
+                        164,
                         new DateAndTime(new CalendarDate(1980, 4, 22), new TimeOfDay(14, 36, 51.67)),
                         -4,
-                        0,
-                        164).toString(),
+                        0).toString(),
                     new TimeOfDay(1, 4, 23.655).toString());
             });
 
@@ -483,28 +483,28 @@
                 assert.equal(
                     astronomy.hourAngleToRightAscension(
                         new TimeOfDay(9, 52, 23.655),
+                        -64,
                         new DateAndTime(new CalendarDate(1980, 4, 22), new TimeOfDay(14, 36, 51.67)),
                         -4,
-                        0,
-                        -64).toString(),
+                        0).toString(),
                     new TimeOfDay(18, 32, 21).toString());
 
                 assert.equal( // Daylight Savings Time, Positive Zone Correction
                     astronomy.hourAngleToRightAscension(
                         new TimeOfDay(9, 52, 23.655),
+                        -64,
                         new DateAndTime(new CalendarDate(1980, 4, 22), new TimeOfDay(14, 36, 51.67)),
                         4,
-                        1,
-                        -64).toString(),
+                        1).toString(),
                     new TimeOfDay(9, 30, 52.292).toString());
 
                 assert.equal( // Positive Longitude
                     astronomy.hourAngleToRightAscension(
                         new TimeOfDay(9, 52, 23.655),
+                        164,
                         new DateAndTime(new CalendarDate(1980, 4, 22), new TimeOfDay(14, 36, 51.67)),
                         -4,
-                        0,
-                        164).toString(),
+                        0).toString(),
                     new TimeOfDay(9, 44, 21).toString());
             });
 
@@ -513,7 +513,7 @@
             test("Hour angle equatorial coordinates to horizon coordinates", function(assert) {
 
                 assert.equal(
-                    astronomy.hourAngleEquatorialCoordinatesToHorizonCoordinates(
+                    astronomy.hourAngleEquatorialToHorizonCoordinates(
                         new HourAngleEquatorialCoordinates(
                             new TimeOfDay(5, 51, 44), // hour angle
                             new DegreesMinutesSeconds(23, 13, 10) // declination
@@ -527,7 +527,7 @@
                 );
 
                 assert.equal(
-                    astronomy.hourAngleEquatorialCoordinatesToHorizonCoordinates(
+                    astronomy.hourAngleEquatorialToHorizonCoordinates(
                         new HourAngleEquatorialCoordinates(
                             new TimeOfDay(18, 29, 30.206), // hour angle
                             new DegreesMinutesSeconds(18, 4, 49.351) // declination
@@ -546,7 +546,7 @@
             test("Horizon coordinates to hour angle equatorial coordinates", function(assert) {
 
                 assert.equal(
-                    astronomy.horizonCoordinatesToHourAngleEquatorialCoordinates(
+                    astronomy.horizonToHourAngleEquatorialCoordinates(
                         new HorizonCoordinates(
                             new DegreesMinutesSeconds(283, 16, 15.698), // azimuth
                             new DegreesMinutesSeconds(19, 20, 3.643) // altitude
@@ -560,7 +560,7 @@
                 );
 
                 assert.equal(
-                    astronomy.horizonCoordinatesToHourAngleEquatorialCoordinates(
+                    astronomy.horizonToHourAngleEquatorialCoordinates(
                         new HorizonCoordinates(
                             new DegreesMinutesSeconds(83, 15, 16.8), // azimuth
                             new DegreesMinutesSeconds(18, 19, 4.51) // altitude
@@ -585,7 +585,7 @@
             test("Ecliptic coordinates to right ascension equatorial coordinates", function(assert) {
 
                 assert.equal(
-                    astronomy.eclipticCoordinatesToRightAscensionEquatorialCoordinates(
+                    astronomy.eclipticToRightAscensionEquatorialCoordinates(
                         new EclipticCoordinates(
                             new DegreesMinutesSeconds(139, 41, 10), // ecliptic longitude
                             new DegreesMinutesSeconds(4, 52, 31) // ecliptic latitude
@@ -599,7 +599,7 @@
                 );
 
                 assert.equal(
-                    astronomy.eclipticCoordinatesToRightAscensionEquatorialCoordinates(
+                    astronomy.eclipticToRightAscensionEquatorialCoordinates(
                         new EclipticCoordinates(
                             new DegreesMinutesSeconds(220, 18, 49.96), // ecliptic longitude
                             new DegreesMinutesSeconds(4, 52, 31) // ecliptic latitude
@@ -618,7 +618,7 @@
             test("Right ascension equatorial coordinates to ecliptic coordinates", function(assert) {
 
                 assert.equal(
-                    astronomy.rightAscensionEquatorialCoordinatesToEclipticCoordinates(
+                    astronomy.rightAscensionEquatorialToEclipticCoordinates(
                         new RightAscensionEquatorialCoordinates(
                           new TimeOfDay(9, 34, 53.402), // right ascension
                           new DegreesMinutesSeconds(19, 32, 8.517) // declination
@@ -632,7 +632,7 @@
                 );
 
                 assert.equal(
-                    astronomy.rightAscensionEquatorialCoordinatesToEclipticCoordinates(
+                    astronomy.rightAscensionEquatorialToEclipticCoordinates(
                         new RightAscensionEquatorialCoordinates(
                             new TimeOfDay(14, 37, 48.87), // right ascension
                             new DegreesMinutesSeconds(-10, 16, 35.12) // declination
@@ -651,7 +651,7 @@
             test("Right ascension equatorial coordinates to galactic coordinates", function(assert) {
 
                 assert.equal(
-                    astronomy.rightAscensionEquatorialCoordinatesToGalacticCoordinates(
+                    astronomy.rightAscensionEquatorialToGalacticCoordinates(
                         new RightAscensionEquatorialCoordinates(
                             new TimeOfDay(10, 21, 0), // right ascension
                             new DegreesMinutesSeconds(10, 3, 11) // declination
@@ -664,7 +664,7 @@
                 );
 
                 assert.equal(
-                    astronomy.rightAscensionEquatorialCoordinatesToGalacticCoordinates(
+                    astronomy.rightAscensionEquatorialToGalacticCoordinates(
                         new RightAscensionEquatorialCoordinates(
                             new TimeOfDay(1, 19, 1), // right ascension
                             new DegreesMinutesSeconds(9, 5, 12) // declination
@@ -682,7 +682,7 @@
             test("Galactic coordinates to right ascension equatorial coordinates", function(assert) {
 
                 assert.equal(
-                    astronomy.galacticCoordinatesToRightAscensionEquatorialCoordinates(
+                    astronomy.galacticToRightAscensionEquatorialCoordinates(
                         new GalacticCoordinates(
                             new DegreesMinutesSeconds(232, 14, 52.381), // galactic longitude
                             new DegreesMinutesSeconds(51, 7, 20.164) // galactic latitude
@@ -695,7 +695,7 @@
                 );
 
                 assert.equal(
-                    astronomy.galacticCoordinatesToRightAscensionEquatorialCoordinates(
+                    astronomy.galacticToRightAscensionEquatorialCoordinates(
                         new GalacticCoordinates(
                             new DegreesMinutesSeconds(135, 18, 52.127), // galactic longitude
                             new DegreesMinutesSeconds(-52, 47, 45.315) // galactic latitude
@@ -706,6 +706,48 @@
                         new DegreesMinutesSeconds(9, 5, 12) // declination
                     ).toString()
                 );
+            });
+
+            module ("31 - Generalised coordinate transformations")
+
+            test("Hour angle equatorial coordinates to right ascension equatorial coordinates", function(assert) {
+
+                assert.equal(
+                    astronomy.hourAngleEquatorialToRightAscensionEquatorialCoordinates(
+                        new HourAngleEquatorialCoordinates(
+                            new TimeOfDay(0, 50, 54.947), // hour angle
+                            new DegreesMinutesSeconds(10, 3, 11) // declination
+                        ),
+                        -64,
+                        new DateAndTime(new CalendarDate(1980, 4, 22), new TimeOfDay(14, 36, 51.67)),
+                        4,
+                        1
+                    ).toString(),
+                    new RightAscensionEquatorialCoordinates(
+                        new TimeOfDay(18, 32, 21), // right ascension
+                        new DegreesMinutesSeconds(10, 3, 11) // declination
+                    ).toString()
+                )
+            });
+
+            test("Right ascension equatorial coordinates to hour angle equatorial coordinates", function(assert) {
+
+                assert.equal(
+                    astronomy.rightAscensionEquatorialToHourAngleEquatorialCoordinates(
+                        new RightAscensionEquatorialCoordinates(
+                            new TimeOfDay(18, 32, 21), // right ascension
+                            new DegreesMinutesSeconds(10, 3, 11) // declination
+                        ),
+                        -64,
+                        new DateAndTime(new CalendarDate(1980, 4, 22), new TimeOfDay(14, 36, 51.67)),
+                        4,
+                        1
+                    ).toString(),
+                    new HourAngleEquatorialCoordinates(
+                        new TimeOfDay(0, 50, 54.947), // hour angle
+                        new DegreesMinutesSeconds(10, 3, 11) // declination
+                    ).toString()
+                )
             });
 
             module("32 - The angle between two celestial objects")
