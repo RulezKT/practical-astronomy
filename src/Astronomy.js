@@ -740,9 +740,9 @@ Astronomy.prototype.galacticToEclipticCoordinates = function(galacticCoordinates
 
 Astronomy.prototype.hourAngleEquatorialToEclipticCoordinates = function(hourAngleEquatorialCoordinates, longitude, dateAndTime, zoneCorrection, daylightSaving) {
 
-    var rightAscensionEclipticCoordinates =
+    var rightAscensionEquatorialCoordinates =
         this.hourAngleEquatorialToRightAscensionEquatorialCoordinates(hourAngleEquatorialCoordinates, longitude, dateAndTime, zoneCorrection, daylightSaving)
-    var eclipticCoordinates = this.rightAscensionEquatorialToEclipticCoordinates(rightAscensionEclipticCoordinates, dateAndTime.calendarDate);
+    var eclipticCoordinates = this.rightAscensionEquatorialToEclipticCoordinates(rightAscensionEquatorialCoordinates, dateAndTime.calendarDate);
 
     return eclipticCoordinates;
 }
@@ -750,10 +750,28 @@ Astronomy.prototype.hourAngleEquatorialToEclipticCoordinates = function(hourAngl
 Astronomy.prototype.eclipticToHourAngleEquatorialCoordinates = function(eclipticCoordinates, longitude, dateAndTime, zoneCorrection, daylightSaving) {
 
     var rightAscensionEquatorialCoordinates = this.eclipticToRightAscensionEquatorialCoordinates(eclipticCoordinates, dateAndTime.calendarDate);
-    var hourAngleEclipticCoordinates =
+    var hourAngleEquatorialCoordinates =
         this.rightAscensionEquatorialToHourAngleEquatorialCoordinates(rightAscensionEquatorialCoordinates, longitude, dateAndTime, zoneCorrection, daylightSaving);
 
-    return hourAngleEclipticCoordinates;
+    return hourAngleEquatorialCoordinates;
+}
+
+Astronomy.prototype.hourAngleEquatorialToGalacticCoordinates = function(hourAngleEquatorialCoordinates, longitude, dateAndTime, zoneCorrection, daylightSaving) {
+
+    var rightAscensionEquatorialCoordinates =
+        this.hourAngleEquatorialToRightAscensionEquatorialCoordinates(hourAngleEquatorialCoordinates, longitude, dateAndTime, zoneCorrection, daylightSaving)
+    var galacticCoordinates = this.rightAscensionEquatorialToGalacticCoordinates(rightAscensionEquatorialCoordinates);
+
+    return galacticCoordinates;
+}
+
+Astronomy.prototype.galacticToHourAngleEquatorialCoordinates = function(galacticCoordinates, longitude, dateAndTime, zoneCorrection, daylightSaving) {
+
+    var rightAscensionEquatorialCoordinates = this.galacticToRightAscensionEquatorialCoordinates(galacticCoordinates);
+    var hourAngleEquatorialCoordinates =
+        this.rightAscensionEquatorialToHourAngleEquatorialCoordinates(rightAscensionEquatorialCoordinates, longitude, dateAndTime, zoneCorrection, daylightSaving);
+
+    return hourAngleEquatorialCoordinates;
 }
 
 /*
