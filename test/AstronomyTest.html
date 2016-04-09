@@ -750,6 +750,40 @@
                 )
             });
 
+            test("Ecliptic coordinates to galactic coordinates", function(assert) {
+
+                assert.equal(
+                    astronomy.eclipticToGalacticCoordinates(
+                        new EclipticCoordinates(
+                            new DegreesMinutesSeconds(139, 41, 9.967), // ecliptic longitude
+                            new DegreesMinutesSeconds(4, 52, 30.999) // ecliptic latitude
+                        ),
+                        new CalendarDate(2009, 7, 6)
+                    ).toString(),
+                    new GalacticCoordinates(
+                        new DegreesMinutesSeconds(212, 13, 0.555), // galactic longitude
+                        new DegreesMinutesSeconds(45, 4, 22.466) // galactic latitude
+                    ).toString()
+                )
+            });
+
+            test("Galactic coordinates to ecliptic coordinates", function(assert) {
+
+                assert.equal(
+                    astronomy.galacticToEclipticCoordinates(
+                        new GalacticCoordinates(
+                            new DegreesMinutesSeconds(212, 13, 0.555), // galactic longitude
+                            new DegreesMinutesSeconds(45, 4, 22.466) // galactic latitude
+                        ),
+                        new CalendarDate(2009, 7, 6)
+                    ).toString(),
+                    new EclipticCoordinates(
+                        new DegreesMinutesSeconds(139, 41, 9.967), // ecliptic longitude
+                        new DegreesMinutesSeconds(4, 52, 30.999) // ecliptic latitude
+                    ).toString()
+                )
+            });
+
             module("32 - The angle between two celestial objects")
 
             test("Angle between right ascension equatorial coordinates", function(assert) {

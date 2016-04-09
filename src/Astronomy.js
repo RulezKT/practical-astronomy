@@ -722,7 +722,21 @@ Astronomy.prototype.rightAscensionEquatorialToHourAngleEquatorialCoordinates = f
     return new HourAngleEquatorialCoordinates(hourAngle, declination);
 }
 
+Astronomy.prototype.eclipticToGalacticCoordinates = function(eclipticCoordinates, calendarDate) {
 
+    var rightAscensionEquatorialCoordinates = this.eclipticToRightAscensionEquatorialCoordinates(eclipticCoordinates, calendarDate);
+    var galacticCoordinates =  this.rightAscensionEquatorialToGalacticCoordinates(rightAscensionEquatorialCoordinates);
+
+    return galacticCoordinates;
+}
+
+Astronomy.prototype.galacticToEclipticCoordinates = function(galacticCoordinates, calendarDate) {
+
+    var rightAscensionEquatorialCoordinates = this.galacticToRightAscensionEquatorialCoordinates(galacticCoordinates);
+    var eclipticCoordinates =  this.rightAscensionEquatorialToEclipticCoordinates(rightAscensionEquatorialCoordinates, calendarDate);
+
+    return eclipticCoordinates;
+}
 
 /*
  * 32 - The angle between two celestial objects
