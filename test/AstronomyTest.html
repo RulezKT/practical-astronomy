@@ -784,6 +784,46 @@
                 )
             });
 
+            test("Hour angle equatorial coordinates to ecliptic coordinates", function(assert) {
+
+                assert.equal(
+                    astronomy.hourAngleEquatorialToEclipticCoordinates(
+                        new HourAngleEquatorialCoordinates(
+                            new TimeOfDay(9, 48, 22.51), // hour angle
+                            new DegreesMinutesSeconds(19, 32, 9.69) // declination
+                        ),
+                        -64,
+                        new DateAndTime(new CalendarDate(1980, 4, 22), new TimeOfDay(14, 36, 51.67)),
+                        4,
+                        1
+                    ).toString(),
+                    new EclipticCoordinates(
+                        new DegreesMinutesSeconds(139, 41, 9.961), // ecliptic longitude
+                        new DegreesMinutesSeconds(4, 52, 30.996) // ecliptic latitude
+                    ).toString()
+                )
+            });
+
+            test("Ecliptic coordinates to hour angle equatorial coordinates", function(assert) {
+
+                assert.equal(
+                    astronomy.eclipticToHourAngleEquatorialCoordinates(
+                        new EclipticCoordinates(
+                            new DegreesMinutesSeconds(139, 41, 9.961), // ecliptic longitude
+                            new DegreesMinutesSeconds(4, 52, 30.996) // ecliptic latitude
+                        ),
+                        -64,
+                        new DateAndTime(new CalendarDate(1980, 4, 22), new TimeOfDay(14, 36, 51.67)),
+                        4,
+                        1
+                    ).toString(),
+                    new HourAngleEquatorialCoordinates(
+                        new TimeOfDay(9, 48, 22.51), // hour angle
+                        new DegreesMinutesSeconds(19, 32, 9.69) // declination
+                    ).toString()
+                )
+            });
+
             module("32 - The angle between two celestial objects")
 
             test("Angle between right ascension equatorial coordinates", function(assert) {
