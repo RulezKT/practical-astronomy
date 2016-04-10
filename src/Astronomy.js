@@ -810,6 +810,24 @@ Astronomy.prototype.eclipticToHorizonCoordinates = function(eclipticCoordinates,
     return horizonCoordinates;
 }
 
+Astronomy.prototype.horizonToGalacticCoordinates = function(horizonCoordinates, latitude, longitude, dateAndTime, zoneCorrection, daylightSaving) {
+
+    var rightAscensionEquatorialCoordinates =
+        this.horizonToRightAscensionEquatorialCoordinates(horizonCoordinates, latitude, longitude, dateAndTime, zoneCorrection, daylightSaving);
+    var galacticCoordinates = this.rightAscensionEquatorialToGalacticCoordinates(rightAscensionEquatorialCoordinates);
+
+    return galacticCoordinates;
+}
+
+Astronomy.prototype.galacticToHorizonCoordinates = function(galacticCoordinates, latitude, longitude, dateAndTime, zoneCorrection, daylightSaving) {
+
+    var rightAscensionEquatorialCoordinates = this.galacticToRightAscensionEquatorialCoordinates(galacticCoordinates);
+    var horizonCoordinates =
+        this.rightAscensionEquatorialToHorizonCoordinates(rightAscensionEquatorialCoordinates, latitude, longitude, dateAndTime, zoneCorrection, daylightSaving);
+
+    return horizonCoordinates;
+}
+
 /*
  * 32 - The angle between two celestial objects
  */
