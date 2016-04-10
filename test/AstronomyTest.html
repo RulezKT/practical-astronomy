@@ -864,6 +864,48 @@
                 )
             });
 
+            test("Horizon coordinates to right ascension equatorial coordinates", function(assert) {
+
+                assert.equal(
+                    astronomy.horizonToRightAscensionEquatorialCoordinates(
+                        new HorizonCoordinates(
+                            new DegreesMinutesSeconds(198, 28, 28.334), // azimuth
+                            new DegreesMinutesSeconds(46, 47, 28.928) // altitude
+                        ),
+                        52,
+                        -64,
+                        new DateAndTime(new CalendarDate(1980, 4, 22), new TimeOfDay(14, 36, 51.67)),
+                        4,
+                        1
+                    ).toString(),
+                    new RightAscensionEquatorialCoordinates(
+                        new TimeOfDay(18, 32, 20.997), // right ascension
+                        new DegreesMinutesSeconds(10, 3, 10.998) // declination
+                    ).toString()
+                )
+            });
+
+            test("Right ascension equatorial coordinates to horizon coordinates", function(assert) {
+
+                assert.equal(
+                    astronomy.rightAscensionEquatorialToHorizonCoordinates(
+                        new RightAscensionEquatorialCoordinates(
+                            new TimeOfDay(18, 32, 20.997), // right ascension
+                            new DegreesMinutesSeconds(10, 3, 10.998) // declination
+                        ),
+                        52,
+                        -64,
+                        new DateAndTime(new CalendarDate(1980, 4, 22), new TimeOfDay(14, 36, 51.67)),
+                        4,
+                        1
+                    ).toString(),
+                    new HorizonCoordinates(
+                        new DegreesMinutesSeconds(198, 28, 28.334), // azimuth
+                        new DegreesMinutesSeconds(46, 47, 28.928) // altitude
+                    ).toString()
+                )
+            });
+
             module("32 - The angle between two celestial objects")
 
             test("Angle between right ascension equatorial coordinates", function(assert) {
